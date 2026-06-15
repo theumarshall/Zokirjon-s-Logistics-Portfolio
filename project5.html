@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>05 · Third &amp; Fourth Party Logistics — Portfolio</title>
+<meta name="description" content="Interactive provider finder: answer a few questions and land on the right logistics outsourcing level, from 1PL to 4PL, with a side-by-side comparison.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .quiz{padding:28px}
+  .quiz__prog{display:flex;gap:7px;margin-bottom:22px}
+  .quiz__prog i{height:6px;flex:1;border-radius:99px;background:#e6e2d6}
+  .quiz__prog i.done{background:var(--steel)}
+  .quiz__prog i.cur{background:var(--amber)}
+  .quiz__q{font-family:'Archivo',sans-serif;font-weight:800;font-size:clamp(1.2rem,2.6vw,1.6rem);line-height:1.2;margin:0 0 24px;color:var(--ink)}
+  .quiz__btns{display:flex;gap:12px;flex-wrap:wrap}
+  .quiz__step{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.08em;color:var(--amber-deep);text-transform:uppercase;margin-bottom:12px}
+  .ladder{display:grid;gap:10px;margin-top:6px}
+  .rung{display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:center;text-align:left;width:100%;
+    border:1px solid var(--line-strong);border-left:5px solid var(--line-strong);border-radius:var(--r);
+    background:var(--card);padding:15px 18px;cursor:pointer;transition:all .14s;font:inherit;color:inherit}
+  .rung:hover{border-left-color:var(--steel-2);transform:translateX(2px)}
+  .rung.on{border-left-color:var(--amber);background:#fff8ea;box-shadow:0 8px 22px -16px rgba(20,24,31,.5)}
+  .rung__code{font-family:'Archivo',sans-serif;font-weight:900;font-size:1.5rem;color:var(--steel);min-width:54px}
+  .rung.on .rung__code{color:var(--amber-deep)}
+  .rung__name{font-weight:700;font-size:1.02rem}
+  .rung__tag{font-family:var(--font-mono);font-size:.76rem;color:var(--ink-faint);margin-top:2px}
+  .rung__hint{font-family:var(--font-mono);font-size:.68rem;color:var(--ink-faint);letter-spacing:.04em;text-transform:uppercase}
+  .result{border:1px solid var(--line-strong);border-top:4px solid var(--amber);border-radius:var(--r);background:#fff;padding:24px}
+  .result__code{display:inline-block;font-family:'Archivo',sans-serif;font-weight:900;font-size:1rem;background:#1a1206;color:var(--amber);padding:5px 12px;border-radius:99px;letter-spacing:.06em;margin-bottom:12px}
+  .result h3{font-family:'Archivo',sans-serif;font-weight:800;font-size:1.5rem;margin:0 0 4px}
+  .result__tagline{font-family:var(--font-mono);font-size:.8rem;color:var(--amber-deep);text-transform:uppercase;letter-spacing:.05em;margin-bottom:14px}
+  .result p{margin:0 0 16px;color:var(--ink-soft)}
+  .result__meta{display:grid;gap:10px}
+  .result__meta .m{display:flex;gap:12px;font-size:.9rem;border-top:1px solid var(--line);padding-top:10px}
+  .result__meta .m b{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-faint);min-width:120px}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav__inner">
+    <a class="brand" href="index.html">
+      <span class="brand__mark">MANIFEST&nbsp;#2317428</span>
+      <span class="brand__name">Logistics Portfolio</span>
+    </a>
+    <button class="nav__toggle" aria-expanded="false" aria-controls="navlinks">MENU</button>
+    <nav class="nav__links" id="navlinks" aria-label="Primary">
+      <a href="index.html">Home</a>
+      <a href="project1.html">01 · Supply Chains</a>
+      <a href="project2.html">02 · Cost</a>
+      <a href="project3.html">03 · Modes</a>
+      <a href="project4.html">04 · Warehousing</a>
+      <a href="project5.html" aria-current="page">05 · 3PL / 4PL</a>
+      <a href="reflection.html">Reflection</a>
+    </nav>
+  </div>
+</header>
+
+<div class="phead">
+  <div class="phead__inner">
+    <div class="phead__crumb"><a href="index.html">Manifest</a> <span>/</span> <span>Project 05</span> <span>/</span> <span>Chapter 6</span></div>
+    <div class="phead__tags">
+      <span class="tag tag--ch">Chapter 6</span>
+      <span class="tag tag--reading">Reading-based</span>
+      <span class="tag" style="border-color:rgba(255,255,255,.4);color:#fff">Provider finder</span>
+    </div>
+    <h1>Third &amp; Fourth<br>Party Logistics</h1>
+    <p class="phead__sub">From doing everything yourself to handing your whole supply chain to a partner — the more you outsource, the higher the "PL" number climbs.</p>
+    <div class="pprogress" aria-hidden="true"><i></i><i></i><i></i><i></i><i class="on"></i></div>
+  </div>
+</div>
+
+<main class="wrap">
+
+  <!-- 1 OVERVIEW -->
+  <section class="psec">
+    <div class="psec__head"><span class="psec__num">1</span><h2>Project overview</h2></div>
+    <p class="psec__intro">As companies grow, they face a recurring question: how much of logistics should we run ourselves, and how much should we hand to specialists? Chapter 6 answers it with a ladder — <strong>1PL to 4PL</strong> — where each rung outsources more. The labels look like jargon, but each marks a real shift in who owns the trucks, who runs the warehouses, and who designs the whole network.</p>
+    <ul class="bullets">
+      <li><b>What inspired it:</b> the chapter's definitions of 1PL through 4PL and the legal 2008 definition of a 3PL as a party that holds and transports goods without taking title.</li>
+      <li><b>The concept:</b> outsourcing deepens as you climb — a 2PL just moves freight; a 3PL manages functions; a 4PL designs and runs the entire supply chain as a single interface.</li>
+      <li><b>Why it matters:</b> picking the right level shapes cost, control and how much logistics expertise a company needs in-house.</li>
+    </ul>
+  </section>
+
+  <!-- 2 DEMONSTRATION -->
+  <section class="psec">
+    <div class="psec__head"><span class="psec__num">2</span><h2>Demonstration · Which provider do you need?</h2></div>
+    <p class="psec__intro">Answer a few yes/no questions about how your operation runs and the finder lands you on the right level. Or skip the quiz and tap any rung on the ladder to read what it means.</p>
+
+    <div class="two-col">
+      <div class="console" style="align-self:start">
+        <div class="console__bar">PROVIDER FINDER <span class="mono" style="opacity:.7">// yes / no</span><span class="dotrow"><i></i><i></i><i></i></span></div>
+        <div class="quiz" id="quiz">
+          <div class="quiz__prog" id="qprog" aria-hidden="true"></div>
+          <div class="quiz__step" id="qstep">Question 1 of 4</div>
+          <p class="quiz__q" id="qtext"></p>
+          <div class="quiz__btns" id="qbtns">
+            <button class="btn btn--amber" data-a="yes">Yes</button>
+            <button class="btn btn--ghost" data-a="no">No</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="result" id="result" aria-live="polite">
+        <span class="result__code">START</span>
+        <h3>Find your fit</h3>
+        <div class="result__tagline">Answer the questions →</div>
+        <p>Your recommended logistics provider level will appear here, with what you keep control of and what the provider takes on. The ladder below highlights your match.</p>
+      </div>
+    </div>
+
+    <div class="k mono" style="font-size:.7rem;letter-spacing:.06em;color:var(--ink-faint);text-transform:uppercase;margin:26px 0 10px">The outsourcing ladder · tap to explore</div>
+    <div class="ladder" id="ladder" role="group" aria-label="Logistics provider levels"></div>
+
+    <div class="callout" style="margin-top:22px"><b>Two words worth knowing:</b> the <em>consignor</em> is the party shipping the goods; the <em>consignee</em> is the party receiving them. At a 1PL, the consignor does everything; by 4PL, a lead logistics provider sits between the consignor and a whole network of carriers and warehouses.</div>
+  </section>
+
+  <!-- 3 EVIDENCE -->
+  <section class="psec">
+    <div class="psec__head"><span class="psec__num">3</span><h2>Evidence</h2></div>
+    <p class="psec__intro">The finder encodes Chapter 6's level-by-level breakdown. Recreated as a single comparison.</p>
+
+    <table class="manifest-table" style="margin-bottom:24px">
+      <caption>Recreated · 1PL → 4PL at a glance</caption>
+      <thead><tr><th>Level</th><th>Outsources</th><th>Owns assets?</th><th>Designs supply chain?</th><th>Example</th></tr></thead>
+      <tbody>
+        <tr><td><b>1PL</b></td><td>Nothing — in-house</td><td class="pos">You do</td><td>You do</td><td>Farm delivering to a store</td></tr>
+        <tr><td><b>2PL</b></td><td>Transportation (one mode)</td><td>Carrier does</td><td class="neg">No</td><td>FedEx</td></tr>
+        <tr><td><b>3PL</b></td><td>Logistics functions</td><td>Provider does</td><td class="neg">No — executes only</td><td>Warehousing + customs + multimodal</td></tr>
+        <tr><td><b>4PL</b></td><td>The entire supply chain</td><td>Coordinates others'</td><td class="pos">Yes — designs &amp; manages</td><td>Lead Logistics Provider</td></tr>
+      </tbody>
+    </table>
+
+    <figure class="figure-card" style="margin-top:0">
+      <div class="callout" style="margin:0;border-left-color:var(--steel-2)">
+        <b>What a 3PL actually does.</b> Chapter 6 lists the functions a third-party provider may offer: warehousing, cross-docking and load consolidation; customs brokerage; multimodal transportation; freight forwarding; freight verification; and transportation sourcing. The key distinction from a 2PL is that a 3PL <em>executes and manages</em> the delivery side — not just one truck movement.
+      </div>
+      <figcaption>Concept · Chapter 6 — the 3PL function set</figcaption>
+    </figure>
+  </section>
+
+  <!-- 4 LEARN -->
+  <section class="psec">
+    <div class="psec__head"><span class="psec__num">4</span><h2>What did I learn?</h2></div>
+    <div class="learn">
+      <div class="learn__col">
+        <h3>Knowledge <span>// concepts</span></h3>
+        <ul>
+          <li>The <b>1PL–4PL ladder</b> and exactly what each level outsources.</li>
+          <li>A 4PL or <b>Lead Logistics Provider</b> designs and manages the whole chain.</li>
+          <li><b>Consignor vs consignee</b>, and the legal definition of a 3PL.</li>
+        </ul>
+      </div>
+      <div class="learn__col">
+        <h3>Skills <span>// abilities</span></h3>
+        <ul>
+          <li>Turning definitions into a <b>branching decision tree</b>.</li>
+          <li>Building a guided <b>questionnaire</b> with a clear, explainable outcome.</li>
+          <li>Designing a <b>comparison view</b> that stays useful outside the quiz.</li>
+        </ul>
+      </div>
+      <div class="learn__col">
+        <h3>Reflection <span>// real world</span></h3>
+        <ul>
+          <li><b>Surprising:</b> a 3PL can run your whole operation yet never <em>design</em> it — that's the 4PL's job.</li>
+          <li><b>Difficult:</b> writing questions that cleanly separate 2PL from 3PL from 4PL.</li>
+          <li><b>Applied:</b> this is the make-or-buy decision behind every growing company's logistics.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <nav class="pnav" aria-label="Project navigation">
+    <a href="project4.html"><small>← Previous</small><b>04 · Warehousing &amp; Cross-Docking</b></a>
+    <a class="next" href="reflection.html"><small>Final stop →</small><b>The Reflection</b></a>
+  </nav>
+</main>
+
+<footer class="foot">
+  <div class="foot__inner">
+    <div class="foot__top">
+      <div><div class="foot__brand">Logistics Learning Portfolio</div><div class="mono" style="font-size:.8rem;color:#8295a2">Zokirjon · Student No. 2317428</div></div>
+      <nav class="foot__links" aria-label="Footer"><a href="index.html">Home</a><a href="project1.html">Supply Chains</a><a href="project2.html">Cost</a><a href="project3.html">Modes</a><a href="project4.html">Warehousing</a><a href="project5.html">3PL / 4PL</a><a href="reflection.html">Reflection</a></nav>
+    </div>
+    <div class="foot__meta"><span>Built as a static site · HTML · CSS · JavaScript · Hosted on GitHub Pages</span><span>© <span data-year>2025</span> · Concepts from <em>Introduction to Logistics</em> (Adzija, CC BY-NC-SA 4.0)</span></div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id);};
+
+  var results={
+    '1pl':{code:'1PL',name:'First-Party Logistics',tag:'Do it all yourself',
+      body:'You own the trucks and the labour and manage every function in-house — from accepting the order to making the goods to delivering them. The shipper (consignor) is also the carrier.',
+      keep:'Full control of everything',hand:'Nothing — all in-house',ex:'A farm delivering its own produce to a local store.'},
+    '2pl':{code:'2PL',name:'Second-Party Logistics',tag:'Outsource the moving',
+      body:'You hand the transportation leg to a carrier that specialises in one mode — road, ocean or air. They move the freight as you instruct, but they don\'t plan or integrate with your supply chain.',
+      keep:'Planning &amp; integration',hand:'Transportation, one mode',ex:'FedEx carrying your parcels.'},
+    '3pl':{code:'3PL',name:'Third-Party Logistics',tag:'Outsource the functions',
+      body:'A 3PL manages delivery-related functions for you — warehousing, cross-docking, customs brokerage, multimodal transport, freight forwarding. It executes and manages delivery, but it doesn\'t design your supply chain.',
+      keep:'Supply-chain design',hand:'Warehousing, customs, multimodal',ex:'A provider running your warehousing, customs and multi-mode shipping.'},
+    '4pl':{code:'4PL',name:'Fourth-Party Logistics (LLP)',tag:'Hand over the whole brain',
+      body:'A 4PL — or Lead Logistics Provider — designs and manages your entire supply chain. It is a single interface coordinating multiple providers: deciding FTL vs LTL, warehouse locations, pick-up frequency and rates, often as a joint venture.',
+      keep:'Just the relationship',hand:'The entire supply chain',ex:'A lead logistics provider orchestrating all your carriers and warehouses.'}
+  };
+  var order=['1pl','2pl','3pl','4pl'];
+
+  // build ladder
+  var ladder=$('ladder');
+  ladder.innerHTML=order.map(function(k){
+    var r=results[k];
+    return '<button class="rung" data-k="'+k+'"><span class="rung__code">'+r.code+'</span>'+
+      '<span><span class="rung__name">'+r.name+'</span><span class="rung__tag">'+r.tag+'</span></span>'+
+      '<span class="rung__hint">Tap →</span></button>';
+  }).join('');
+
+  function showResult(k){
+    var r=results[k];
+    $('result').innerHTML='<span class="result__code">'+r.code+'</span>'+
+      '<h3>'+r.name+'</h3><div class="result__tagline">'+r.tag+'</div>'+
+      '<p>'+r.body+'</p>'+
+      '<div class="result__meta">'+
+        '<div class="m"><b>You keep</b><span>'+r.keep+'</span></div>'+
+        '<div class="m"><b>They handle</b><span>'+r.hand+'</span></div>'+
+        '<div class="m"><b>Example</b><span>'+r.ex+'</span></div>'+
+      '</div>';
+    document.querySelectorAll('.rung').forEach(function(b){b.classList.toggle('on',b.dataset.k===k);});
+  }
+  ladder.querySelectorAll('.rung').forEach(function(b){
+    b.addEventListener('click',function(){showResult(b.dataset.k);resetQuizSilent();});
+  });
+
+  // quiz state machine: yes/no -> result key (string) or next step index (number)
+  var steps=[
+    {q:'Do you deliver using your own trucks and your own staff?',yes:'1pl',no:1},
+    {q:'Do you just need a carrier to move freight — one mode, no planning or integration?',yes:'2pl',no:2},
+    {q:'Do you need logistics functions managed for you — warehousing, customs clearance, multiple modes, freight forwarding?',yes:3,no:'2pl'},
+    {q:'Do you want one partner to design and manage your entire supply chain as a single point of contact?',yes:'4pl',no:'3pl'}
+  ];
+  var cur=0, answered=0;
+
+  function renderQuiz(){
+    var s=steps[cur];
+    $('qtext').textContent=s.q;
+    $('qstep').textContent='Question '+(cur+1)+' of '+steps.length;
+    var prog=$('qprog'); prog.innerHTML='';
+    for(var i=0;i<steps.length;i++){
+      var bar=document.createElement('i');
+      bar.className = i<cur?'done':(i===cur?'cur':'');
+      prog.appendChild(bar);
+    }
+    $('qbtns').style.display='flex';
+  }
+  function resetQuizSilent(){ cur=0; renderQuiz(); }
+
+  $('qbtns').addEventListener('click',function(e){
+    var btn=e.target.closest('button'); if(!btn) return;
+    var s=steps[cur];
+    var next=s[btn.dataset.a];
+    if(typeof next==='string'){
+      showResult(next);
+      // mark all progress done
+      var prog=$('qprog'); Array.prototype.forEach.call(prog.children,function(c){c.className='done';});
+      $('qtext').textContent='Matched — see your result. Adjust an answer or tap a rung to compare.';
+      $('qstep').textContent='Complete';
+      $('qbtns').style.display='none';
+      // add a restart control
+      if(!document.getElementById('qrestart')){
+        var rb=document.createElement('button');
+        rb.id='qrestart'; rb.className='btn btn--ghost btn--sm'; rb.textContent='Start over';
+        rb.style.marginTop='16px';
+        rb.addEventListener('click',function(){ this.remove(); cur=0; renderQuiz(); });
+        $('quiz').appendChild(rb);
+      }
+    } else {
+      cur=next; renderQuiz();
+    }
+  });
+
+  renderQuiz();
+})();
+</script>
+</body>
+</html>

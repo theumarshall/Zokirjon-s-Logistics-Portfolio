@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>03 · Modes of Transportation — Portfolio</title>
+<meta name="description" content="Interactive mode-selection decision tool: score truck, rail, air, ocean and pipeline against a shipment's weight, distance, urgency, value and product form.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<script src="chart.min.js"></script>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav__inner">
+    <a class="brand" href="index.html">
+      <span class="brand__mark">MANIFEST&nbsp;#2317428</span>
+      <span class="brand__name">Logistics Portfolio</span>
+    </a>
+    <button class="nav__toggle" aria-expanded="false" aria-controls="navlinks">MENU</button>
+    <nav class="nav__links" id="navlinks" aria-label="Primary">
+      <a href="index.html">Home</a>
+      <a href="project1.html">01 · Supply Chains</a>
+      <a href="project2.html">02 · Cost</a>
+      <a href="project3.html" aria-current="page">03 · Modes</a>
+      <a href="project4.html">04 · Warehousing</a>
+      <a href="project5.html">05 · 3PL / 4PL</a>
+      <a href="reflection.html">Reflection</a>
+    </nav>
+  </div>
+</header>
+
+<div class="phead">
+  <div class="phead__inner">
+    <div class="phead__crumb"><a href="index.html">Manifest</a> <span>/</span> <span>Project 03</span> <span>/</span> <span>Chapter 4</span></div>
+    <div class="phead__tags">
+      <span class="tag tag--ch">Chapter 4</span>
+      <span class="tag tag--model">Built model</span>
+      <span class="tag" style="border-color:rgba(255,255,255,.4);color:#fff">Decision engine</span>
+    </div>
+    <h1>Modes of Transportation</h1>
+    <p class="phead__sub">Truck, rail, air, ocean or pipeline? The right answer depends entirely on the shipment. This tool scores all five against the cargo you describe.</p>
+    <div class="pprogress" aria-hidden="true"><i></i><i></i><i class="on"></i><i></i><i></i></div>
+  </div>
+</div>
+
+<main class="wrap">
+
+  <!-- 1 OVERVIEW -->
+  <section class="psec">
+    <div class="psec__head"><span class="psec__num">1</span><h2>Project overview</h2></div>
+    <p class="psec__intro">Every mode of transportation trades one thing for another — speed for cost, flexibility for capacity. Chapter 4 lays out five modes and the questions that decide between them: <strong>what is the product, how urgent is it, and what restrictions does it carry?</strong> Moving wheat to Australia is nothing like shipping live lobster across the country.</p>
+    <ul class="bullets">
+      <li><b>What inspired it:</b> the chapter's "shipping challenge" — given a product, work out the best way to move it — and the summary chart contrasting all five modes.</li>
+      <li><b>The concept:</b> there is no single best mode, only the best <em>fit</em>. Weight, distance, urgency, value, perishability and product form push the decision toward different modes.</li>
+      <li><b>Why it matters:</b> mode choice sets both the cost and the speed of the entire supply chain — and a wrong call (air-freighting bulk gravel, shipping vaccines by sea) is expensive or impossible.</li>
+    </ul>
+  </section>
+
+  <!-- 2 DEMONSTRATION -->
+  <section class="psec">
+    <div class="psec__head"><span class="psec__num">2</span><h2>Demonstration · Mode-selection engine</h2></div>
+    <p class="psec__intro">Describe the shipment. The engine applies the trade-offs from Chapter 4, ranks all five modes, recommends a fit, and plots where your choice lands on the classic cost-versus-speed map.</p>
+
+    <div class="console">
+      <div class="console__bar">MODE SELECTOR <span class="mono" style="opacity:.7">// describe the shipment</span><span class="dotrow"><i></i><i></i><i></i></span></div>
+      <div class="console__body">
+        <div class="console__inputs">
+          <div class="field">
+            <label>Shipment size</label>
+            <div class="seg" id="segWeight" role="group" aria-label="Shipment size">
+              <button data-v="1" aria-pressed="false">Parcel</button>
+              <button data-v="2" aria-pressed="true">LTL</button>
+              <button data-v="3" aria-pressed="false">FTL</button>
+              <button data-v="4" aria-pressed="false">Bulk</button>
+            </div>
+            <div class="hint">Parcel &lt;100 lb · LTL 100–5,000 lb · FTL 20,000 lb+ · Bulk = commodities / containers.</div>
+          </div>
+          <div class="field">
+            <label>Distance</label>
+            <div class="seg" id="segDist" role="group" aria-label="Distance">
+              <button data-v="1" aria-pressed="false">Local</button>
+              <button data-v="2" aria-pressed="true">Regional</button>
+              <button data-v="3" aria-pressed="false">Cross-country</button>
+              <button data-v="4" aria-pressed="false">Overseas</button>
+            </div>
+          </div>
+          <div class="field">
+            <label>Product form</label>
+            <div class="seg" id="segForm" role="group" aria-label="Product form">
+              <button data-v="general" aria-pressed="true">General cargo</button>
+              <button data-v="drybulk" aria-pressed="false">Dry bulk</button>
+              <button data-v="liquid" aria-pressed="false">Liquid / gas</button>
+            </div>
+            <div class="hint">Liquid &amp; gas (crude oil, natural gas) is what makes pipelines viable.</div>
+          </div>
+          <div class="field">
+            <label>Urgency <span class="v" id="vUrg">3 · Normal</span></label>
+            <input type="range" id="urg" min="1" max="5" step="1" value="3">
+            <div class="hint">How time-critical is delivery?</div>
+          </div>
+          <div class="field">
+            <label>Value / perishability <span class="v" id="vVal">2 · Standard</span></label>
+            <input type="range" id="val" min="1" max="5" step="1" value="2">
+            <div class="hint">High-value or perishable goods reward speed and reliability.</div>
+          </div>
+          <div class="field">
+            <label style="margin-bottom:0">
+              <span>Crosses an ocean</span>
+              <span class="v"><input type="checkbox" id="ocean" style="width:auto;transform:scale(1.3);accent-color:var(--amber)"></span>
+            </label>
+            <div class="hint">If the route must cross open sea, only air and ocean can carry the long leg.</div>
+          </div>
+        </div>
+
+        <div class="console__output">
+          <div class="verdict verdict--ok" id="recBox" style="margin-top:0"><b>Recommendation</b> — adjust the shipment to see the best-fit mode.</div>
+
+          <div class="k mono" style="font-size:.7rem;letter-spacing:.06em;color:var(--ink-faint);text-transform:uppercase;margin:18px 0 8px">Mode suitability ranking</div>
+          <ul class="reclist" id="ranking"></ul>
+
+          <div class="stat" style="margin-top:14px">
+            <div class="k">Suggested shipping category</div>
+            <div class="v" id="oCat" style="font-size:1.2rem">—</div>
+          </div>
+
+          <div style="margin-top:18px">
+            <div class="k mono" style="font-size:.7rem;letter-spacing:.06em;color:var(--ink-faint);text-transform:uppercase;margin-bottom:6px">The cost vs speed trade-off</div>
+            <div class="chartbox chartbox--tall"><canvas id="csChart"></canvas></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout" style="margin-top:22px"><b>Notice the map:</b> air sits top-right (fast but costly), ocean bottom-left (cheap but slow), and truck in the middle — flexible and door-to-door. There's no point that's both fastest and cheapest; choosing a mode <em>is</em> choosing a trade-off.</div>
+  </section>
+
+  <!-- 3 EVIDENCE -->
+  <section class="psec">
+    <div class="psec__head"><span class="psec__num">3</span><h2>Evidence</h2></div>
+    <p class="psec__intro">The engine's logic comes straight from Chapter 4's comparison of modes and its categories of shipping options. Recreated below.</p>
+
+    <table class="manifest-table" style="margin-bottom:26px">
+      <caption>Recreated · The five modes at a glance</caption>
+      <thead><tr><th>Mode</th><th>Speed</th><th>Relative cost</th><th>Best for</th><th>Limitation</th></tr></thead>
+      <tbody>
+        <tr><td><b>Truck</b></td><td>Moderate</td><td class="mono">Medium</td><td>Flexible, door-to-door; LTL, FTL &amp; parcel</td><td>Driver shortage; congestion</td></tr>
+        <tr><td><b>Rail</b></td><td>Slower</td><td class="mono">Low</td><td>Bulky goods &amp; containers over long distances; energy-efficient</td><td>Not door-to-door</td></tr>
+        <tr><td><b>Air</b></td><td>Fastest</td><td class="mono">Highest</td><td>Small, light, urgent, high-value goods</td><td>Most expensive; no bulk</td></tr>
+        <tr><td><b>Ocean</b></td><td>Slowest</td><td class="mono">Lowest</td><td>Heavy &amp; bulk cargo; ~80% of world goods by sea</td><td>Slow; port-to-port only</td></tr>
+        <tr><td><b>Pipeline</b></td><td>Steady</td><td class="mono">Very low</td><td>Crude oil, natural gas &amp; petroleum</td><td>Liquids/gas only; fixed route</td></tr>
+      </tbody>
+    </table>
+
+    <div class="two-col">
+      <table class="manifest-table">
+        <caption>Recreated · Categories of shipping options</caption>
+        <thead><tr><th>Code</th><th>Means</th><th>Typical weight</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">Parcel</td><td>Small package / courier</td><td>&lt; 100 lb</td></tr>
+          <tr><td class="mono">LTL</td><td>Less than truckload</td><td>100–5,000 lb</td></tr>
+          <tr><td class="mono">FTL</td><td>Full truckload</td><td>20,000 lb +</td></tr>
+          <tr><td class="mono">LCL</td><td>Less than container load</td><td>Shared container</td></tr>
+          <tr><td class="mono">FCL</td><td>Full container load</td><td>Whole container</td></tr>
+          <tr><td class="mono">Bulk</td><td>Unpackaged commodity</td><td>Ship / rail scale</td></tr>
+        </tbody>
+      </table>
+      <figure class="figure-card" style="margin-top:0">
+        <div class="callout" style="margin:0;border-left-color:var(--steel-2)">
+          <b>Intermodal &amp; multimodal.</b> Real shipments often combine modes — a container moves by truck, then rail, then ocean, under a single contract, never being unpacked. The container is the key: it keeps goods secure and untouched through every handoff, cutting loss and damage. The engine recommends a primary mode, but the smartest routes chain several together.
+        </div>
+        <figcaption>Concept · Chapter 4 — combining modes</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- 4 LEARN -->
+  <section class="psec">
+    <div class="psec__head"><span class="psec__num">4</span><h2>What did I learn?</h2></div>
+    <div class="learn">
+      <div class="learn__col">
+        <h3>Knowledge <span>// concepts</span></h3>
+        <ul>
+          <li>The <b>five modes</b> and the distinct niche each one owns.</li>
+          <li><b>Shipping categories</b> — parcel, LTL, FTL, LCL, FCL and bulk.</li>
+          <li>Why <b>intermodal</b> shipping and containers changed global trade.</li>
+        </ul>
+      </div>
+      <div class="learn__col">
+        <h3>Skills <span>// abilities</span></h3>
+        <ul>
+          <li><b>Multi-criteria decision modelling</b> — weighting several factors into one score.</li>
+          <li>Encoding <b>hard constraints</b> (pipelines can't carry boxes; trucks can't cross oceans).</li>
+          <li>Visualising a <b>trade-off space</b> rather than a single number.</li>
+        </ul>
+      </div>
+      <div class="learn__col">
+        <h3>Reflection <span>// real world</span></h3>
+        <ul>
+          <li><b>Surprising:</b> ~80% of the world's goods move by sea — the slow mode dominates.</li>
+          <li><b>Difficult:</b> tuning the weights so urgency and value pull air up without breaking ties.</li>
+          <li><b>Applied:</b> this is the first question a freight forwarder asks about any new lane.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <nav class="pnav" aria-label="Project navigation">
+    <a href="project2.html"><small>← Previous</small><b>02 · The Cost of Logistics</b></a>
+    <a class="next" href="project4.html"><small>Next project →</small><b>04 · Warehousing &amp; Cross-Docking</b></a>
+  </nav>
+</main>
+
+<footer class="foot">
+  <div class="foot__inner">
+    <div class="foot__top">
+      <div><div class="foot__brand">Logistics Learning Portfolio</div><div class="mono" style="font-size:.8rem;color:#8295a2">Zokirjon · Student No. 2317428</div></div>
+      <nav class="foot__links" aria-label="Footer"><a href="index.html">Home</a><a href="project1.html">Supply Chains</a><a href="project2.html">Cost</a><a href="project3.html">Modes</a><a href="project4.html">Warehousing</a><a href="project5.html">3PL / 4PL</a><a href="reflection.html">Reflection</a></nav>
+    </div>
+    <div class="foot__meta"><span>Built as a static site · HTML · CSS · JavaScript · Hosted on GitHub Pages</span><span>© <span data-year>2025</span> · Concepts from <em>Introduction to Logistics</em> (Adzija, CC BY-NC-SA 4.0)</span></div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id);};
+  var state={weight:2,dist:2,form:'general',urg:3,val:2,ocean:false};
+
+  // segmented controls
+  function seg(groupId,key){
+    var g=$(groupId);
+    g.querySelectorAll('button').forEach(function(b){
+      b.addEventListener('click',function(){
+        g.querySelectorAll('button').forEach(function(x){x.setAttribute('aria-pressed','false');});
+        b.setAttribute('aria-pressed','true');
+        var v=b.dataset.v; state[key]=isNaN(+v)?v:+v; calc();
+      });
+    });
+  }
+  seg('segWeight','weight'); seg('segDist','dist'); seg('segForm','form');
+  var urgLbl=['','Very low','Low','Normal','High','Critical'];
+  var valLbl=['','Low','Standard','Elevated','High','Premium'];
+  $('urg').addEventListener('input',function(){state.urg=+this.value;calc();});
+  $('val').addEventListener('input',function(){state.val=+this.value;calc();});
+  $('ocean').addEventListener('change',function(){state.ocean=this.checked;calc();});
+
+  var MODES=[
+    {key:'truck',name:'Truck',color:'#2b4456',cs:{s:60,c:50}},
+    {key:'rail', name:'Rail', color:'#3d627a',cs:{s:40,c:28}},
+    {key:'air',  name:'Air',  color:'#f2a516',cs:{s:98,c:92}},
+    {key:'ocean',name:'Ocean',color:'#1c7a52',cs:{s:12,c:10}},
+    {key:'pipe', name:'Pipeline',color:'#8a5a2b',cs:{s:45,c:14}}
+  ];
+
+  function score(m){
+    var w=state.weight,d=state.dist,urg=state.urg/5,val=state.val/5,form=state.form,oc=state.ocean;
+    var s=0;
+    if(m==='truck'){
+      s=55; s+=15;                       // door-to-door flexibility
+      s+=18*urg;                         // decent speed
+      if(w===4) s-=28; else s+=10;       // poor for bulk
+      if(d===3) s-=6; if(d===4) s-= oc?45:12;
+      if(form==='liquid') s-=12; else if(form==='drybulk') s-=6;
+    } else if(m==='rail'){
+      s=46;
+      s+=(d>=3?26:(d===2?8:-12));        // shines over distance
+      if(w>=3) s+=20; if(w===1) s-=22;   // bulk/FTL good, parcel bad
+      if(form==='drybulk') s+=15; if(form==='liquid') s+=4;
+      s-=10;                             // not door-to-door
+      s-=16*urg;                         // slower
+      if(oc) s-=34;                      // can't cross ocean alone
+    } else if(m==='air'){
+      s=38;
+      s+=36*urg;                         // speed is everything
+      s+=24*val;                         // high value favors air
+      s-=24;                             // expensive baseline
+      if(w<=2) s+=15; if(w===3) s-=22; if(w===4) s-=48;
+      if(d>=3) s+=18;
+      if(oc) s+=22;                      // can cross ocean
+      if(form==='liquid') s-=20; if(form==='drybulk') s-=16;
+    } else if(m==='ocean'){
+      s=40;
+      if(w>=3) s+=28; if(w===4) s+=12;
+      if(d===4) s+=26; if(d===1) s-=46;
+      if(oc) s+=30;
+      s-=30*urg;                         // slowest
+      s-=12*val;                         // risk for perishables
+      if(form==='drybulk') s+=14; if(form==='liquid') s+=8;
+      s-=12;                             // port-to-port
+    } else if(m==='pipe'){
+      if(form!=='liquid'){ s=4; }
+      else {
+        s=52; s+=30;                     // very cheap once built
+        s+=(d>=3?12:0);
+        s-=8;                            // fixed route
+        if(w===1) s-=10;
+      }
+    }
+    return Math.max(3,Math.min(100,Math.round(s)));
+  }
+
+  function category(){
+    var w=state.weight,oc=state.ocean;
+    if(w===1) return 'Parcel / courier';
+    if(w===2) return oc?'LCL (shared container)':'LTL — less than truckload';
+    if(w===3) return oc?'FCL — full container load':'FTL — full truckload';
+    return oc?'Bulk / FCL by sea':'Bulk — rail or truckload';
+  }
+
+  var reasons={
+    truck:'flexible door-to-door service over shorter distances',
+    rail:'low-cost, energy-efficient capacity for heavy loads over long distances',
+    air:'unmatched speed for urgent, high-value or light shipments',
+    ocean:'the lowest cost per unit for heavy, bulky, non-urgent cargo',
+    pipe:'continuous, very low-cost movement of liquids and gases'
+  };
+
+  var csChart=new Chart($('csChart'),{
+    type:'scatter',
+    data:{datasets:[{
+      data:MODES.map(function(m){return {x:m.cs.s,y:m.cs.c,key:m.key};}),
+      pointBackgroundColor:MODES.map(function(m){return m.color;}),
+      pointRadius:9,pointHoverRadius:11,borderWidth:0
+    }]},
+    options:{responsive:true,maintainAspectRatio:false,
+      layout:{padding:{right:20,top:10}},
+      scales:{
+        x:{title:{display:true,text:'Speed →',font:{family:'IBM Plex Mono',size:11}},min:0,max:110,ticks:{display:false},grid:{color:'#e6e2d6'}},
+        y:{title:{display:true,text:'Cost per unit →',font:{family:'IBM Plex Mono',size:11}},min:0,max:105,ticks:{display:false},grid:{color:'#e6e2d6'}}
+      },
+      plugins:{legend:{display:false},
+        tooltip:{callbacks:{label:function(c){var m=MODES.find(function(x){return x.key===c.raw.key;});return ' '+m.name;}}}}
+    },
+    plugins:[{
+      id:'labels',
+      afterDatasetsDraw:function(chart){
+        var ctx=chart.ctx, meta=chart.getDatasetMeta(0);
+        ctx.save();ctx.font='700 12px Archivo, sans-serif';ctx.fillStyle='#14181f';
+        meta.data.forEach(function(pt,i){
+          var m=MODES[i];
+          ctx.textAlign='left';
+          ctx.fillText(m.name, pt.x+12, pt.y+4);
+        });
+        ctx.restore();
+      }
+    }]
+  });
+
+  function calc(){
+    $('vUrg').textContent=state.urg+' · '+urgLbl[state.urg];
+    $('vVal').textContent=state.val+' · '+valLbl[state.val];
+
+    var ranked=MODES.map(function(m){return {m:m,sc:score(m.key)};}).sort(function(a,b){return b.sc-a.sc;});
+    var top=ranked[0];
+
+    // ranking list
+    $('ranking').innerHTML=ranked.map(function(r){
+      var win=r===top;
+      return '<li class="'+(win?'win':'')+'"><span class="rank">'+(win?'★':'')+'</span>'+
+        '<span style="min-width:74px;font-weight:600">'+r.m.name+'</span>'+
+        '<span class="bar"><i style="width:'+r.sc+'%;background:'+(win?'var(--amber)':'#9fb0bd')+'"></i></span>'+
+        '<span class="sc">'+r.sc+'</span></li>';
+    }).join('');
+
+    // recommendation
+    var second=ranked[1];
+    var rb=$('recBox');
+    rb.className='verdict verdict--ok';
+    rb.innerHTML='<b>Recommended: '+top.m.name+'.</b> For this shipment, '+top.m.name.toLowerCase()+' offers '+reasons[top.m.key]+
+      '. Next best is '+second.m.name.toLowerCase()+' ('+second.sc+'/100).';
+
+    $('oCat').textContent=category();
+
+    // chart highlight
+    csChart.data.datasets[0].pointRadius=MODES.map(function(m){return m.key===top.m.key?14:8;});
+    csChart.data.datasets[0].pointBackgroundColor=MODES.map(function(m){return m.key===top.m.key?m.color:m.color+'66';});
+    csChart.update('none');
+  }
+
+  calc();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>02 · The Cost of Logistics — Portfolio</title>
+<meta name="description" content="Interactive over-the-road freight cost calculator: fixed vs variable costs, fuel surcharge, deadhead and backhaul, and whether a lane is profitable.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<script src="chart.min.js"></script>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav__inner">
+    <a class="brand" href="index.html">
+      <span class="brand__mark">MANIFEST&nbsp;#2317428</span>
+      <span class="brand__name">Logistics Portfolio</span>
+    </a>
+    <button class="nav__toggle" aria-expanded="false" aria-controls="navlinks">MENU</button>
+    <nav class="nav__links" id="navlinks" aria-label="Primary">
+      <a href="index.html">Home</a>
+      <a href="project1.html">01 · Supply Chains</a>
+      <a href="project2.html" aria-current="page">02 · Cost</a>
+      <a href="project3.html">03 · Modes</a>
+      <a href="project4.html">04 · Warehousing</a>
+      <a href="project5.html">05 · 3PL / 4PL</a>
+      <a href="reflection.html">Reflection</a>
+    </nav>
+  </div>
+</header>
+
+<div class="phead">
+  <div class="phead__inner">
+    <div class="phead__crumb"><a href="index.html">Manifest</a> <span>/</span> <span>Project 02</span> <span>/</span> <span>Chapter 3</span></div>
+    <div class="phead__tags">
+      <span class="tag tag--ch">Chapter 3</span>
+      <span class="tag tag--model">Built model</span>
+      <span class="tag" style="border-color:rgba(255,255,255,.4);color:#fff">Live calculator</span>
+    </div>
+    <h1>The Cost of Logistics</h1>
+    <p class="phead__sub">In a low-margin business, one missed variable turns a profitable lane into a loss. This calculator prices an over-the-road freight move the way a carrier actually has to.</p>
+    <div class="pprogress" aria-hidden="true"><i></i><i class="on"></i><i></i><i></i><i></i></div>
+  </div>
+</div>
+
+<main class="wrap">
+
+  <!-- 1 OVERVIEW -->
+  <section class="psec">
+    <div class="psec__head"><span class="psec__num">1</span><h2>Project overview</h2></div>
+    <p class="psec__intro">Logistics cost is simply the total cost of moving freight from one place to another — but "simply" hides a lot. Chapter 3 breaks an over-the-road (OTR) trucking move into <strong>fixed costs</strong> (paid whether or not the truck hauls anything) and <strong>variable costs</strong> (which dominate — roughly 70% of OTR cost). Get the mix wrong and the move loses money.</p>
+    <ul class="bullets">
+      <li><b>What inspired it:</b> the chapter's fixed/variable cost table, the fuel-surcharge formula, and the "elements of a move" — deadhead, pickup, bill of lading, highway miles, delivery, backhaul.</li>
+      <li><b>The concept:</b> price a move by capturing <em>every</em> segment — including empty deadhead miles and idle waiting time — then recover fuel through a surcharge and offset cost with a paid backhaul.</li>
+      <li><b>Why it matters:</b> "if the wheels ain't turnin', no one's earnin'." Idle time and empty miles are pure cost, and the calculator makes that visible instantly.</li>
+    </ul>
+  </section>
+
+  <!-- 2 DEMONSTRATION -->
+  <section class="psec">
+    <div class="psec__head"><span class="psec__num">2</span><h2>Demonstration · OTR freight cost calculator</h2></div>
+    <p class="psec__intro">Set the parameters of a lane and price it from the carrier's side. The fuel surcharge only kicks in when diesel rises above the peg rate; a paid backhaul reduces the effective cost of sending the truck out.</p>
+
+    <div class="console">
+      <div class="console__bar">FREIGHT COST MODEL <span class="mono" style="opacity:.7">// carrier perspective</span><span class="dotrow"><i></i><i></i><i></i></span></div>
+      <div class="console__body">
+        <!-- INPUTS -->
+        <div class="console__inputs">
+          <div class="field">
+            <label>Loaded highway miles <span class="v" id="vLoaded">500 mi</span></label>
+            <input type="range" id="loaded" min="50" max="2500" step="10" value="500">
+            <div class="hint">The revenue-generating "headhaul" distance.</div>
+          </div>
+          <div class="field">
+            <label>Deadhead (empty) miles <span class="v" id="vDead">60 mi</span></label>
+            <input type="range" id="dead" min="0" max="600" step="5" value="60">
+            <div class="hint">Empty repositioning to pick up or return to terminal — pure cost.</div>
+          </div>
+          <div class="field">
+            <label>Average speed <span class="v" id="vSpeed">55 mph</span></label>
+            <input type="range" id="speed" min="35" max="70" step="1" value="55">
+          </div>
+          <div class="field">
+            <label>Waiting / loading time <span class="v" id="vWait">3.0 h</span></label>
+            <input type="range" id="wait" min="0" max="10" step="0.5" value="3">
+            <div class="hint">Waiting on bills of lading, live loading and delivery. Idle but paid.</div>
+          </div>
+          <div class="field">
+            <label>Driver wage <span class="v" id="vWage">$28 / h</span></label>
+            <input type="range" id="wage" min="18" max="45" step="1" value="28">
+          </div>
+          <div class="field">
+            <label>Other variable cost <span class="v" id="vVar">$0.25 / mi</span></label>
+            <input type="range" id="varmi" min="0.1" max="0.6" step="0.01" value="0.25">
+            <div class="hint">Maintenance, tires and road tolls per mile.</div>
+          </div>
+          <div class="field">
+            <label>Truck fuel economy <span class="v" id="vMpg">6.5 mpg</span></label>
+            <input type="range" id="mpg" min="4" max="9" step="0.1" value="6.5">
+          </div>
+          <div class="field">
+            <label>Diesel price <span class="v" id="vDiesel">$4.00 / gal</span></label>
+            <input type="range" id="diesel" min="2" max="6" step="0.05" value="4">
+          </div>
+          <div class="field">
+            <label>Fuel surcharge peg rate <span class="v" id="vPeg">$1.25 / gal</span></label>
+            <input type="range" id="peg" min="1" max="3" step="0.05" value="1.25">
+            <div class="hint">Fuel above this price is recovered from the shipper as a surcharge.</div>
+          </div>
+          <div class="field">
+            <label>Fixed cost per day <span class="v" id="vFixed">$500 / day</span></label>
+            <input type="range" id="fixed" min="200" max="1200" step="25" value="500">
+            <div class="hint">Lease, depreciation, insurance, licensing, management.</div>
+          </div>
+          <div class="field">
+            <label>Paid backhaul revenue <span class="v" id="vBack">$0</span></label>
+            <input type="range" id="back" min="0" max="2000" step="50" value="0">
+            <div class="hint">Revenue from a return load instead of running empty.</div>
+          </div>
+          <div class="field">
+            <label>Price quoted to customer <span class="v" id="vQuote">$1,300</span></label>
+            <input type="range" id="quote" min="300" max="4000" step="25" value="1300">
+          </div>
+        </div>
+
+        <!-- OUTPUT -->
+        <div class="console__output">
+          <div class="readout">
+            <div class="stat"><div class="k">Total cost to run lane</div><div class="v" id="oCost">$0</div></div>
+            <div class="stat"><div class="k">Cost / loaded mile</div><div class="v amber" id="oCpm">$0</div></div>
+            <div class="stat"><div class="k">Fuel surcharge recovered</div><div class="v" id="oFsc" style="font-size:1.2rem">$0</div></div>
+            <div class="stat"><div class="k">Committed days</div><div class="v" id="oDays" style="font-size:1.2rem">1</div></div>
+            <div class="stat stat--wide"><div class="k">Net profit on this move</div><div class="v" id="oProfit">$0 <small id="oMargin"></small></div></div>
+          </div>
+
+          <div class="verdict verdict--info" id="oVerdict"><b>Set the lane</b> — adjust the controls to price the move.</div>
+
+          <div style="margin-top:18px">
+            <div class="k mono" style="font-size:.7rem;letter-spacing:.06em;color:var(--ink-faint);text-transform:uppercase;margin-bottom:6px">Cost composition</div>
+            <div class="chartbox"><canvas id="costChart"></canvas></div>
+          </div>
+          <div style="margin-top:16px">
+            <div class="k mono" style="font-size:.7rem;letter-spacing:.06em;color:var(--ink-faint);text-transform:uppercase;margin-bottom:6px">Fixed vs variable split</div>
+            <div class="chartbox" style="height:120px"><canvas id="splitChart"></canvas></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout" style="margin-top:22px"><b>Read the split:</b> watch the fixed-vs-variable bar. The OTR industry runs on high variable cost and low fixed cost — partly because public roads aren't a cost the carrier builds. Longer hauls push the variable share even higher.</div>
+  </section>
+
+  <!-- 3 EVIDENCE -->
+  <section class="psec">
+    <div class="psec__head"><span class="psec__num">3</span><h2>Evidence</h2></div>
+    <p class="psec__intro">The calculator is built on two artifacts from Chapter 3: the table of fixed and variable trucking costs, and the seven-step anatomy of a freight move. Here they are, recreated in my own words.</p>
+    <div class="two-col">
+      <table class="manifest-table">
+        <caption>Recreated · Fixed vs variable trucking costs</caption>
+        <thead><tr><th>Fixed (paid regardless)</th><th>Variable (per move / mile)</th></tr></thead>
+        <tbody>
+          <tr><td>Truck &amp; trailer lease</td><td>Driver labour</td></tr>
+          <tr><td>Depreciation</td><td>Fuel</td></tr>
+          <tr><td>Office / garage rent</td><td>Maintenance &amp; parts</td></tr>
+          <tr><td>Vehicle interest</td><td>Road tolls</td></tr>
+          <tr><td>Management salaries</td><td>Insurance, licence, registration</td></tr>
+        </tbody>
+      </table>
+      <table class="manifest-table">
+        <caption>Recreated · The seven elements of a move</caption>
+        <thead><tr><th>#</th><th>Segment</th><th>Cost driver</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">1</td><td>Deadhead / bobtail</td><td>Empty miles</td></tr>
+          <tr><td class="mono">2</td><td>Freight pickup (PUD)</td><td>Loading time</td></tr>
+          <tr><td class="mono">3</td><td>Bill of lading prep</td><td>Idle waiting</td></tr>
+          <tr><td class="mono">4</td><td>Highway miles</td><td>Fuel + time</td></tr>
+          <tr><td class="mono">5</td><td>Freight delivery</td><td>Unloading time</td></tr>
+          <tr><td class="mono">6</td><td>Delivery instructions</td><td>Idle waiting</td></tr>
+          <tr><td class="mono">7</td><td>Backhaul / deadhead</td><td>Return miles</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout" style="margin-top:22px;border-left-color:var(--steel-2)"><b>Fuel surcharge logic (modelled):</b> surcharge per mile = (diesel price − peg rate) ÷ fuel economy, and never below zero. The carrier pays full diesel as a cost but recovers the portion above the peg from the shipper — exactly how the surcharge protects a carrier from rising fuel prices.</div>
+  </section>
+
+  <!-- 4 LEARN -->
+  <section class="psec">
+    <div class="psec__head"><span class="psec__num">4</span><h2>What did I learn?</h2></div>
+    <div class="learn">
+      <div class="learn__col">
+        <h3>Knowledge <span>// concepts</span></h3>
+        <ul>
+          <li><b>Fixed vs variable</b> cost, and why OTR is ~70% variable.</li>
+          <li>How a <b>fuel surcharge</b> works off a peg rate to offset diesel swings.</li>
+          <li>Why <b>deadhead miles and idle time</b> quietly destroy a lane's margin.</li>
+        </ul>
+      </div>
+      <div class="learn__col">
+        <h3>Skills <span>// abilities</span></h3>
+        <ul>
+          <li><b>Cost modelling</b> — turning a pricing concept into a live spreadsheet-style engine.</li>
+          <li><b>Data visualisation</b> — composition and split charts that update in real time.</li>
+          <li><b>Break-even thinking</b> — finding the price where a move stops losing money.</li>
+        </ul>
+      </div>
+      <div class="learn__col">
+        <h3>Reflection <span>// real world</span></h3>
+        <ul>
+          <li><b>Surprising:</b> how often a "good" lane is actually a small loss once deadhead is counted.</li>
+          <li><b>Difficult:</b> separating fuel cost from fuel surcharge without double-counting.</li>
+          <li><b>Applied:</b> this is the math behind every quote a freight broker gives a shipper.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <nav class="pnav" aria-label="Project navigation">
+    <a href="project1.html"><small>← Previous</small><b>01 · Role of Logistics</b></a>
+    <a class="next" href="project3.html"><small>Next project →</small><b>03 · Modes of Transportation</b></a>
+  </nav>
+</main>
+
+<footer class="foot">
+  <div class="foot__inner">
+    <div class="foot__top">
+      <div><div class="foot__brand">Logistics Learning Portfolio</div><div class="mono" style="font-size:.8rem;color:#8295a2">Zokirjon · Student No. 2317428</div></div>
+      <nav class="foot__links" aria-label="Footer"><a href="index.html">Home</a><a href="project1.html">Supply Chains</a><a href="project2.html">Cost</a><a href="project3.html">Modes</a><a href="project4.html">Warehousing</a><a href="project5.html">3PL / 4PL</a><a href="reflection.html">Reflection</a></nav>
+    </div>
+    <div class="foot__meta"><span>Built as a static site · HTML · CSS · JavaScript · Hosted on GitHub Pages</span><span>© <span data-year>2025</span> · Concepts from <em>Introduction to Logistics</em> (Adzija, CC BY-NC-SA 4.0)</span></div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id);};
+  var ids=['loaded','dead','speed','wait','wage','varmi','mpg','diesel','peg','fixed','back','quote'];
+  var money=function(n){return '$'+Math.round(n).toLocaleString();};
+
+  // charts
+  var palette=['#2b4456','#f2a516','#3d627a','#bb3c26'];
+  var costChart=new Chart($('costChart'),{
+    type:'doughnut',
+    data:{labels:['Driver','Fuel','Maint. & tolls','Fixed allocation'],
+      datasets:[{data:[1,1,1,1],backgroundColor:palette,borderColor:'#fbfaf6',borderWidth:2}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'58%',
+      plugins:{legend:{position:'right',labels:{font:{family:'IBM Plex Mono',size:11},boxWidth:12,padding:10}},
+        tooltip:{callbacks:{label:function(c){return ' '+c.label+': $'+Math.round(c.parsed).toLocaleString();}}}}}
+  });
+  var splitChart=new Chart($('splitChart'),{
+    type:'bar',
+    data:{labels:['This move'],datasets:[
+      {label:'Variable',data:[60],backgroundColor:'#f2a516',stack:'s'},
+      {label:'Fixed',data:[40],backgroundColor:'#2b4456',stack:'s'}]},
+    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+      scales:{x:{stacked:true,max:100,ticks:{callback:function(v){return v+'%';},font:{family:'IBM Plex Mono',size:10}}},
+        y:{stacked:true,ticks:{display:false}}},
+      plugins:{legend:{position:'bottom',labels:{font:{family:'IBM Plex Mono',size:11},boxWidth:12}},
+        tooltip:{callbacks:{label:function(c){return ' '+c.dataset.label+': '+Math.round(c.parsed.x)+'%';}}}}}
+  });
+
+  function calc(){
+    var loaded=+$('loaded').value, dead=+$('dead').value, speed=+$('speed').value, wait=+$('wait').value,
+        wage=+$('wage').value, varmi=+$('varmi').value, mpg=+$('mpg').value, diesel=+$('diesel').value,
+        peg=+$('peg').value, fixed=+$('fixed').value, back=+$('back').value, quote=+$('quote').value;
+
+    // labels
+    $('vLoaded').textContent=loaded+' mi'; $('vDead').textContent=dead+' mi';
+    $('vSpeed').textContent=speed+' mph'; $('vWait').textContent=wait.toFixed(1)+' h';
+    $('vWage').textContent='$'+wage+' / h'; $('vVar').textContent='$'+varmi.toFixed(2)+' / mi';
+    $('vMpg').textContent=mpg.toFixed(1)+' mpg'; $('vDiesel').textContent='$'+diesel.toFixed(2)+' / gal';
+    $('vPeg').textContent='$'+peg.toFixed(2)+' / gal'; $('vFixed').textContent='$'+fixed+' / day';
+    $('vBack').textContent=money(back); $('vQuote').textContent=money(quote);
+
+    var totalMiles=loaded+dead;
+    var driveHrs=totalMiles/speed;
+    var onDuty=driveHrs+wait;
+    var days=Math.max(1,Math.ceil(onDuty/14)); // 14-hr on-duty window
+
+    var driver=wage*onDuty;
+    var gallons=totalMiles/mpg;
+    var fuel=gallons*diesel;
+    var other=varmi*totalMiles;
+    var fixedAlloc=fixed*days;
+    var totalCost=driver+fuel+other+fixedAlloc;
+
+    var fscPerMile=Math.max(0,(diesel-peg))/mpg;
+    var fsc=fscPerMile*totalMiles;
+
+    var revenue=quote+fsc+back;
+    var profit=revenue-totalCost;
+    var margin=revenue>0?(profit/revenue*100):0;
+    var cpm=loaded>0?totalCost/loaded:0;
+
+    // outputs
+    $('oCost').textContent=money(totalCost);
+    $('oCpm').textContent='$'+cpm.toFixed(2);
+    $('oFsc').textContent=money(fsc);
+    $('oDays').textContent=days;
+    $('oProfit').innerHTML=(profit<0?'−$':'$')+Math.abs(Math.round(profit)).toLocaleString()+' <small id="oMargin">('+margin.toFixed(1)+'% margin)</small>';
+    $('oProfit').classList.toggle('amber',false);
+
+    var v=$('oVerdict');
+    if(profit<0){
+      v.className='verdict verdict--warn';
+      v.innerHTML='<b>Unprofitable lane.</b> This move loses '+money(-profit)+'. Cut deadhead, secure a backhaul, or raise the quote above '+money(totalCost-fsc-back)+'.';
+    } else if(margin<6){
+      v.className='verdict verdict--info';
+      v.innerHTML='<b>Thin margin.</b> Profit '+money(profit)+' at '+margin.toFixed(1)+'%. Workable, but one surprise (a toll, a delay) could wipe it out.';
+    } else {
+      v.className='verdict verdict--ok';
+      v.innerHTML='<b>Profitable lane.</b> '+money(profit)+' profit at a healthy '+margin.toFixed(1)+'% margin. The backhaul and surcharge are doing their job.';
+    }
+
+    // charts
+    costChart.data.datasets[0].data=[driver,fuel,other,fixedAlloc];
+    costChart.update('none');
+    var variable=driver+fuel+other;
+    var vPct=totalCost>0?variable/totalCost*100:0;
+    splitChart.data.datasets[0].data=[vPct];
+    splitChart.data.datasets[1].data=[100-vPct];
+    splitChart.update('none');
+  }
+
+  ids.forEach(function(id){$(id).addEventListener('input',calc);});
+  calc();
+})();
+</script>
+</body>
+</html>

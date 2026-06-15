@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Final Reflection — Logistics Portfolio</title>
+<meta name="description" content="Post-trip debrief: the most interesting, challenging and valuable projects, how my understanding of logistics changed, and the skills I developed.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .debrief{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .dcard{display:flex;flex-direction:column;border:1px solid var(--line-strong);border-radius:var(--r);background:var(--card);padding:24px;text-decoration:none;color:inherit;transition:transform .14s,border-color .14s,box-shadow .14s}
+  .dcard:hover{transform:translateY(-3px);border-color:var(--steel-2);box-shadow:0 14px 30px -18px rgba(20,24,31,.5)}
+  .dcard__label{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--amber-deep);font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+  .dcard__label .dot{width:9px;height:9px;border-radius:50%;background:var(--amber)}
+  .dcard__no{font-family:'Archivo',sans-serif;font-weight:900;font-size:2.4rem;color:var(--steel);line-height:1;margin-bottom:6px}
+  .dcard h3{font-family:'Archivo',sans-serif;font-weight:700;font-size:1.2rem;margin:0 0 12px;line-height:1.15}
+  .dcard p{margin:0 0 18px;color:var(--ink-soft);font-size:.94rem}
+  .dcard__go{margin-top:auto;font-family:var(--font-mono);font-weight:600;font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;color:var(--steel)}
+  .dcard:hover .dcard__go{color:var(--amber-deep)}
+  .ba{display:grid;grid-template-columns:1fr auto 1fr;gap:24px;align-items:stretch}
+  .ba__col{border:1px solid var(--line-strong);border-radius:var(--r);background:var(--card);padding:26px}
+  .ba__col h3{font-family:'Archivo',sans-serif;font-weight:800;text-transform:uppercase;letter-spacing:.04em;font-size:1.05rem;margin:0 0 16px;display:flex;align-items:center;gap:10px}
+  .ba__col.origin{border-top:4px solid var(--line-strong)}
+  .ba__col.deliv{border-top:4px solid var(--amber)}
+  .ba__col ul{margin:0;padding-left:18px;display:grid;gap:11px}
+  .ba__col li{color:var(--ink-soft);font-size:.96rem}
+  .ba__arrow{display:flex;align-items:center;justify-content:center;font-family:'Archivo',sans-serif;font-weight:900;color:var(--amber-deep);font-size:1.6rem}
+  .ba__col .pin{font-family:var(--font-mono);font-size:.66rem;letter-spacing:.08em;background:#1a1206;color:var(--amber);padding:3px 8px;border-radius:99px}
+  .skills{display:flex;flex-wrap:wrap;gap:10px}
+  .skills .s{font-family:var(--font-mono);font-size:.84rem;padding:10px 15px;border-radius:99px;border:1px solid var(--line-strong);background:var(--card);color:var(--ink)}
+  .skills .s b{color:var(--amber-deep)}
+  @media (max-width:860px){
+    .debrief{grid-template-columns:1fr}
+    .ba{grid-template-columns:1fr}
+    .ba__arrow{transform:rotate(90deg);padding:4px 0}
+  }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav__inner">
+    <a class="brand" href="index.html">
+      <span class="brand__mark">MANIFEST&nbsp;#2317428</span>
+      <span class="brand__name">Logistics Portfolio</span>
+    </a>
+    <button class="nav__toggle" aria-expanded="false" aria-controls="navlinks">MENU</button>
+    <nav class="nav__links" id="navlinks" aria-label="Primary">
+      <a href="index.html">Home</a>
+      <a href="project1.html">01 · Supply Chains</a>
+      <a href="project2.html">02 · Cost</a>
+      <a href="project3.html">03 · Modes</a>
+      <a href="project4.html">04 · Warehousing</a>
+      <a href="project5.html">05 · 3PL / 4PL</a>
+      <a href="reflection.html" aria-current="page">Reflection</a>
+    </nav>
+  </div>
+</header>
+
+<div class="phead">
+  <div class="phead__inner">
+    <div class="phead__crumb"><a href="index.html">Manifest</a> <span>/</span> <span>Final stop</span> <span>/</span> <span>Debrief</span></div>
+    <div class="phead__tags">
+      <span class="tag" style="border-color:rgba(255,255,255,.4);color:#fff">Final reflection</span>
+      <span class="tag tag--ch">All 5 projects</span>
+    </div>
+    <h1>Post-Trip Debrief</h1>
+    <p class="phead__sub">Five concepts delivered. Here's what stood out, what fought back, what mattered most — and how the whole subject looked different by the end.</p>
+    <div class="pprogress" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></div>
+  </div>
+</div>
+
+<main class="wrap">
+
+  <!-- DEBRIEF CARDS -->
+  <section class="psec">
+    <div class="psec__head"><span class="psec__num">01</span><h2>The three standouts</h2></div>
+    <p class="psec__intro">Across the five builds, three earned a special mention — one for curiosity, one for difficulty, one for lasting usefulness.</p>
+
+    <div class="debrief">
+      <a class="dcard" href="project3.html">
+        <span class="dcard__label"><span class="dot"></span>Most interesting</span>
+        <span class="dcard__no">03</span>
+        <h3>Modes of Transportation</h3>
+        <p>This one was the most fun to think about because there's <em>no single right answer</em>. The same shipment can demand opposite modes depending on one variable — drop urgency and air gives way to ocean; change the product to liquid and a pipeline suddenly wins. Building a scoring engine forced me to make those trade-offs explicit instead of hand-wavy, and watching the cost-versus-speed map react was genuinely satisfying.</p>
+        <span class="dcard__go">Revisit project 03 →</span>
+      </a>
+
+      <a class="dcard" href="project2.html">
+        <span class="dcard__label"><span class="dot"></span>Most challenging</span>
+        <span class="dcard__no">02</span>
+        <h3>The Cost of Logistics</h3>
+        <p>The freight cost calculator was the hardest to get right. The trap was the fuel surcharge: fuel is a cost the carrier pays, yet the surcharge is revenue that offsets it — model it carelessly and you double-count. Add deadhead miles and idle waiting time, and a lane that looks profitable quietly turns into a loss. Getting the model honest — and instructive — took the most iterations of any project.</p>
+        <span class="dcard__go">Revisit project 02 →</span>
+      </a>
+
+      <a class="dcard" href="project1.html">
+        <span class="dcard__label"><span class="dot"></span>Most valuable</span>
+        <span class="dcard__no">01</span>
+        <h3>Role of Logistics in Supply Chains</h3>
+        <p>The flow explorer turned out to be the most valuable, because it's the lens everything else hangs on. Once I could see the four flows and where internal versus external logistics happen, every later topic had a home: cost lives on the arrows, modes connect the tiers, warehouses sit between them, and 3PLs run the whole thing. It's the map I kept coming back to.</p>
+        <span class="dcard__go">Revisit project 01 →</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- BEFORE / AFTER -->
+  <section class="psec">
+    <div class="psec__head"><span class="psec__num">02</span><h2>How my understanding changed</h2></div>
+    <p class="psec__intro">The clearest way to show what I learned is to compare where I started with where I finished.</p>
+
+    <div class="ba">
+      <div class="ba__col origin">
+        <h3><span class="pin">ORIGIN</span> Before</h3>
+        <ul>
+          <li>Logistics meant "shipping" — trucks and boxes moving from A to B.</li>
+          <li>I assumed there was usually one obvious, best way to move something.</li>
+          <li>Cost felt like a single sticker price, not something you build up piece by piece.</li>
+          <li>A warehouse was simply a place to keep things.</li>
+          <li>"3PL" and "4PL" were interchangeable buzzwords.</li>
+        </ul>
+      </div>
+      <div class="ba__arrow" aria-hidden="true">➔</div>
+      <div class="ba__col deliv">
+        <h3><span class="pin">DELIVERED</span> After</h3>
+        <ul>
+          <li>Logistics is a <b>networked system</b> of flows — goods, information, money and returns.</li>
+          <li>Every choice is a <b>trade-off</b>: speed vs cost, flexibility vs capacity, control vs convenience.</li>
+          <li>Cost is <b>assembled</b> from miles, fuel, labour, idle time and fixed overhead — and thin margins punish mistakes.</li>
+          <li>A warehouse is a <b>decision</b>: store goods, or flow them straight through.</li>
+          <li>The PL ladder marks <b>real shifts</b> in who owns assets and who designs the chain.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout" style="margin-top:26px"><b>The big shift:</b> I stopped seeing logistics as "moving stuff" and started seeing it as a series of costed decisions across a connected network. That reframing — from activity to system — is the single most important thing I took from the course.</div>
+  </section>
+
+  <!-- SKILLS -->
+  <section class="psec">
+    <div class="psec__head"><span class="psec__num">03</span><h2>Skills developed</h2></div>
+    <p class="psec__intro">Building these projects sharpened both logistics thinking and the technical skills to communicate it.</p>
+
+    <div class="skills">
+      <span class="s"><b>Systems thinking</b> · mapping whole networks</span>
+      <span class="s"><b>Cost modelling</b> · fixed vs variable, break-even</span>
+      <span class="s"><b>Decision analysis</b> · multi-criteria scoring</span>
+      <span class="s"><b>Data visualisation</b> · Chart.js, live updates</span>
+      <span class="s"><b>Front-end build</b> · HTML · CSS · JavaScript</span>
+      <span class="s"><b>Interaction design</b> · SVG diagrams, calculators</span>
+      <span class="s"><b>Critical thinking</b> · spotting hidden costs</span>
+      <span class="s"><b>Optimisation</b> · trade-offs, not absolutes</span>
+      <span class="s"><b>Technical communication</b> · concept → tool</span>
+    </div>
+  </section>
+
+  <!-- CLOSING -->
+  <section class="band-steel" style="border-radius:6px;margin-bottom:20px">
+    <div class="wrap" style="text-align:center;padding:18px 0">
+      <span class="eyebrow" style="color:var(--amber)">End of route</span>
+      <h2 style="font-family:var(--font-display);font-weight:900;text-transform:uppercase;font-size:clamp(1.6rem,3.6vw,2.4rem);margin:14px 0 14px;letter-spacing:.02em">Cargo delivered.</h2>
+      <p style="max-width:58ch;margin:0 auto 26px;color:#cdd8df;font-size:1.08rem">Five concepts, five working demonstrations, one connected picture of how things move and get stored. Thanks for following the route.</p>
+      <a class="btn btn--amber" href="index.html">← Back to the manifest</a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <div class="foot__inner">
+    <div class="foot__top">
+      <div><div class="foot__brand">Logistics Learning Portfolio</div><div class="mono" style="font-size:.8rem;color:#8295a2">Zokirjon · Student No. 2317428</div></div>
+      <nav class="foot__links" aria-label="Footer"><a href="index.html">Home</a><a href="project1.html">Supply Chains</a><a href="project2.html">Cost</a><a href="project3.html">Modes</a><a href="project4.html">Warehousing</a><a href="project5.html">3PL / 4PL</a><a href="reflection.html">Reflection</a></nav>
+    </div>
+    <div class="foot__meta"><span>Built as a static site · HTML · CSS · JavaScript · Hosted on GitHub Pages</span><span>© <span data-year>2025</span> · Concepts from <em>Introduction to Logistics</em> (Adzija, CC BY-NC-SA 4.0)</span></div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

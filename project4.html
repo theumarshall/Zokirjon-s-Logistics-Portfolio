@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>04 · Warehousing &amp; Cross-Docking — Portfolio</title>
+<meta name="description" content="Interactive comparator: traditional storage versus cross-docking. Adjust volume, dwell time and handling cost to find the break-even and the monthly saving.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<script src="chart.min.js"></script>
+<style>
+  .flowpath{display:grid;gap:14px;margin:6px 0 0}
+  .flowrow{border:1px solid var(--line-strong);border-radius:var(--r);padding:14px 16px;background:var(--card)}
+  .flowrow h4{margin:0 0 10px;font-family:'Archivo',sans-serif;font-weight:800;font-size:.95rem;text-transform:uppercase;letter-spacing:.03em;display:flex;align-items:center;gap:10px}
+  .flowrow h4 .b{font-family:var(--font-mono);font-size:.64rem;padding:3px 8px;border-radius:99px;letter-spacing:.06em}
+  .chips{display:flex;flex-wrap:wrap;align-items:center;gap:7px}
+  .chips .c{font-family:var(--font-mono);font-size:.74rem;background:#fff;border:1px solid var(--line-strong);padding:6px 11px;border-radius:99px;color:var(--ink-soft)}
+  .chips .c.store{background:#f4e2dd;border-color:#dca99d;color:#8c2c19;font-weight:600}
+  .chips .arr{color:var(--ink-faint);font-weight:700}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav__inner">
+    <a class="brand" href="index.html">
+      <span class="brand__mark">MANIFEST&nbsp;#2317428</span>
+      <span class="brand__name">Logistics Portfolio</span>
+    </a>
+    <button class="nav__toggle" aria-expanded="false" aria-controls="navlinks">MENU</button>
+    <nav class="nav__links" id="navlinks" aria-label="Primary">
+      <a href="index.html">Home</a>
+      <a href="project1.html">01 · Supply Chains</a>
+      <a href="project2.html">02 · Cost</a>
+      <a href="project3.html">03 · Modes</a>
+      <a href="project4.html" aria-current="page">04 · Warehousing</a>
+      <a href="project5.html">05 · 3PL / 4PL</a>
+      <a href="reflection.html">Reflection</a>
+    </nav>
+  </div>
+</header>
+
+<div class="phead">
+  <div class="phead__inner">
+    <div class="phead__crumb"><a href="index.html">Manifest</a> <span>/</span> <span>Project 04</span> <span>/</span> <span>Chapter 5</span></div>
+    <div class="phead__tags">
+      <span class="tag tag--ch">Chapter 5</span>
+      <span class="tag tag--model">Built model</span>
+      <span class="tag" style="border-color:rgba(255,255,255,.4);color:#fff">Strategy comparator</span>
+    </div>
+    <h1>Warehousing &amp; Cross-Docking</h1>
+    <p class="phead__sub">A warehouse doesn't have to store anything. Sometimes the smartest move is to flow goods straight through — receive, sort, reship the same day.</p>
+    <div class="pprogress" aria-hidden="true"><i></i><i></i><i></i><i class="on"></i><i></i></div>
+  </div>
+</div>
+
+<main class="wrap">
+
+  <!-- 1 OVERVIEW -->
+  <section class="psec">
+    <div class="psec__head"><span class="psec__num">1</span><h2>Project overview</h2></div>
+    <p class="psec__intro">Warehousing is the "storing" half of logistics — but Chapter 5 makes a sharp distinction. Traditional storage receives goods, puts them away, holds them for days, then picks and ships. <strong>Cross-docking skips the storage entirely</strong>: the dock becomes a staging area where inbound shipments transition straight to outbound trucks. Fewer touches, no dwell time — but it only works when demand is predictable.</p>
+    <ul class="bullets">
+      <li><b>What inspired it:</b> the chapter's contrast between distribution-centre storage and cross-docking, where "there is no actual storage involved."</li>
+      <li><b>The concept:</b> every time a pallet is handled or sits in storage, it costs money. Cross-docking removes whole steps — but adds a coordination requirement.</li>
+      <li><b>Why it matters:</b> storage space and handling labour are two of the largest warehouse costs. Knowing when to flow versus store is a real budget decision.</li>
+    </ul>
+  </section>
+
+  <!-- 2 DEMONSTRATION -->
+  <section class="psec">
+    <div class="psec__head"><span class="psec__num">2</span><h2>Demonstration · Cross-dock vs storage comparator</h2></div>
+    <p class="psec__intro">Two ways to handle the same flow of goods. Adjust the operation below to see which is cheaper, how many handling touches you remove, and how much storage time disappears.</p>
+
+    <div class="flowpath">
+      <div class="flowrow">
+        <h4>Traditional storage <span class="b" style="background:#f4e2dd;color:#8c2c19">4 touches + dwell</span></h4>
+        <div class="chips">
+          <span class="c">Receive</span><span class="arr">→</span><span class="c">Put away</span><span class="arr">→</span>
+          <span class="c store">Store (dwell days)</span><span class="arr">→</span><span class="c">Pick</span><span class="arr">→</span><span class="c">Ship</span>
+        </div>
+      </div>
+      <div class="flowrow">
+        <h4>Cross-docking <span class="b" style="background:#e3f0e8;color:#13533a">2 touches · no storage</span></h4>
+        <div class="chips">
+          <span class="c">Receive</span><span class="arr">→</span><span class="c">Sort / stage</span><span class="arr">→</span><span class="c">Ship same day</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="console" style="margin-top:20px">
+      <div class="console__bar">WAREHOUSE STRATEGY MODEL <span class="mono" style="opacity:.7">// monthly, 30-day basis</span><span class="dotrow"><i></i><i></i><i></i></span></div>
+      <div class="console__body">
+        <div class="console__inputs">
+          <div class="field">
+            <label>Throughput <span class="v" id="vPal">200 pallets / day</span></label>
+            <input type="range" id="pal" min="20" max="800" step="10" value="200">
+          </div>
+          <div class="field">
+            <label>Storage cost <span class="v" id="vStore">$1.20 / pallet / day</span></label>
+            <input type="range" id="store" min="0.3" max="4" step="0.1" value="1.2">
+          </div>
+          <div class="field">
+            <label>Average dwell time <span class="v" id="vDwell">12 days</span></label>
+            <input type="range" id="dwell" min="1" max="40" step="1" value="12">
+            <div class="hint">How long a stored pallet sits before it ships.</div>
+          </div>
+          <div class="field">
+            <label>Handling cost <span class="v" id="vTouch">$4.50 / touch</span></label>
+            <input type="range" id="touch" min="1" max="12" step="0.25" value="4.5">
+            <div class="hint">Labour &amp; equipment for each time a pallet is moved.</div>
+          </div>
+          <div class="field">
+            <label>Cross-dock staging cost <span class="v" id="vStage">$3.00 / pallet</span></label>
+            <input type="range" id="stage" min="0" max="10" step="0.25" value="3">
+            <div class="hint">Extra coordination cost to flow a pallet straight through.</div>
+          </div>
+          <div class="field">
+            <label>Volume suitable for cross-dock <span class="v" id="vSuit">60%</span></label>
+            <input type="range" id="suit" min="0" max="100" step="5" value="60">
+            <div class="hint">Needs predictable demand — not all goods qualify.</div>
+          </div>
+        </div>
+
+        <div class="console__output">
+          <div class="readout">
+            <div class="stat"><div class="k">Traditional · monthly</div><div class="v" id="oTrad" style="font-size:1.4rem">$0</div></div>
+            <div class="stat"><div class="k">Cross-dock · monthly</div><div class="v amber" id="oXd" style="font-size:1.4rem">$0</div></div>
+            <div class="stat stat--wide"><div class="k">Monthly saving with cross-docking</div><div class="v" id="oSave">$0 <small id="oSavePct"></small></div></div>
+            <div class="stat"><div class="k">Handling touches removed</div><div class="v" id="oTouch" style="font-size:1.3rem">0</div></div>
+            <div class="stat"><div class="k">Storage pallet-days cut</div><div class="v" id="oDwell" style="font-size:1.3rem">0</div></div>
+          </div>
+
+          <div class="verdict verdict--info" id="oVerdict"><b>Run the numbers</b> — adjust the operation to compare.</div>
+
+          <div style="margin-top:18px">
+            <div class="k mono" style="font-size:.7rem;letter-spacing:.06em;color:var(--ink-faint);text-transform:uppercase;margin-bottom:6px">Where the money goes</div>
+            <div class="chartbox"><canvas id="whChart"></canvas></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout" style="margin-top:22px"><b>Push "volume suitable" down to 10%.</b> Cross-docking's advantage collapses, because most goods still need storage — and staging adds cost on top. That's the catch: cross-docking only pays when demand is steady enough to match inbound to outbound.</div>
+  </section>
+
+  <!-- 3 EVIDENCE -->
+  <section class="psec">
+    <div class="psec__head"><span class="psec__num">3</span><h2>Evidence</h2></div>
+    <p class="psec__intro">Chapter 5 catalogues the kinds of warehouse used while goods are in transit, and the forms storage takes across the supply chain. Recreated below.</p>
+
+    <table class="manifest-table" style="margin-bottom:26px">
+      <caption>Recreated · In-transit warehouse types</caption>
+      <thead><tr><th>Type</th><th>What it does</th><th>Stores goods?</th></tr></thead>
+      <tbody>
+        <tr><td><b>Consolidation</b></td><td>Groups shipments from many suppliers heading to one destination</td><td>Briefly</td></tr>
+        <tr><td><b>Cross-docking</b></td><td>Staging area — inbound transitions straight to outbound</td><td class="neg">No storage</td></tr>
+        <tr><td><b>Break-bulk</b></td><td>Splits large inbound loads into smaller outbound shipments</td><td>Briefly</td></tr>
+        <tr><td><b>Hub-and-spoke</b></td><td>Central hub routes goods out to many regional spokes</td><td>Varies</td></tr>
+        <tr><td><b>Distribution centre</b></td><td>Holds finished goods and fulfils retailer / customer orders</td><td class="pos">Yes</td></tr>
+      </tbody>
+    </table>
+
+    <div class="two-col">
+      <table class="manifest-table">
+        <caption>Recreated · Forms of storage by chain position</caption>
+        <thead><tr><th>Form</th><th>Where in the chain</th></tr></thead>
+        <tbody>
+          <tr><td>Raw material storage</td><td>Before manufacturing</td></tr>
+          <tr><td>Finished goods storage</td><td>After manufacturing</td></tr>
+          <tr><td>In-transit storage</td><td>Between moves / modes</td></tr>
+          <tr><td>Distribution centre</td><td>Near the customer</td></tr>
+        </tbody>
+      </table>
+      <figure class="figure-card" style="margin-top:0">
+        <div class="callout" style="margin:0;border-left-color:var(--steel-2)">
+          <b>Same building, different names.</b> Chapter 5 notes that what a company calls its warehouse varies — Amazon calls its warehouses and distribution centres "fulfilment centres." The function matters more than the label: is the building <em>storing</em> goods, or <em>flowing</em> them through? That single question drives the cost model above.
+        </div>
+        <figcaption>Concept · Chapter 5 — warehouse vs fulfilment centre</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- 4 LEARN -->
+  <section class="psec">
+    <div class="psec__head"><span class="psec__num">4</span><h2>What did I learn?</h2></div>
+    <div class="learn">
+      <div class="learn__col">
+        <h3>Knowledge <span>// concepts</span></h3>
+        <ul>
+          <li>The <b>warehouse types</b> — consolidation, cross-dock, break-bulk, hub-and-spoke, DC.</li>
+          <li>That cross-docking involves <b>no actual storage</b> — the dock is a staging area.</li>
+          <li>Storage cost has two halves: <b>handling touches</b> and <b>dwell time</b>.</li>
+        </ul>
+      </div>
+      <div class="learn__col">
+        <h3>Skills <span>// abilities</span></h3>
+        <ul>
+          <li><b>Comparative cost modelling</b> of two operating strategies.</li>
+          <li>Building a <b>break-even</b> the user can move by changing assumptions.</li>
+          <li>Designing a <b>stacked chart</b> that shows <em>why</em> one option is cheaper.</li>
+        </ul>
+      </div>
+      <div class="learn__col">
+        <h3>Reflection <span>// real world</span></h3>
+        <ul>
+          <li><b>Surprising:</b> a warehouse that stores nothing can be the cheapest option.</li>
+          <li><b>Difficult:</b> capturing that cross-docking trades storage cost for coordination cost.</li>
+          <li><b>Applied:</b> grocery and retail chains cross-dock fast-moving stock for exactly these savings.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <nav class="pnav" aria-label="Project navigation">
+    <a href="project3.html"><small>← Previous</small><b>03 · Modes of Transportation</b></a>
+    <a class="next" href="project5.html"><small>Next project →</small><b>05 · Third &amp; Fourth Party Logistics</b></a>
+  </nav>
+</main>
+
+<footer class="foot">
+  <div class="foot__inner">
+    <div class="foot__top">
+      <div><div class="foot__brand">Logistics Learning Portfolio</div><div class="mono" style="font-size:.8rem;color:#8295a2">Zokirjon · Student No. 2317428</div></div>
+      <nav class="foot__links" aria-label="Footer"><a href="index.html">Home</a><a href="project1.html">Supply Chains</a><a href="project2.html">Cost</a><a href="project3.html">Modes</a><a href="project4.html">Warehousing</a><a href="project5.html">3PL / 4PL</a><a href="reflection.html">Reflection</a></nav>
+    </div>
+    <div class="foot__meta"><span>Built as a static site · HTML · CSS · JavaScript · Hosted on GitHub Pages</span><span>© <span data-year>2025</span> · Concepts from <em>Introduction to Logistics</em> (Adzija, CC BY-NC-SA 4.0)</span></div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id);};
+  var ids=['pal','store','dwell','touch','stage','suit'];
+  var money=function(n){return '$'+Math.round(n).toLocaleString();};
+  var TR_TOUCH=4, XD_TOUCH=2, DAYS=30;
+
+  var whChart=new Chart($('whChart'),{
+    type:'bar',
+    data:{labels:['Traditional','Cross-dock'],datasets:[
+      {label:'Handling',data:[0,0],backgroundColor:'#2b4456',stack:'s'},
+      {label:'Storage',data:[0,0],backgroundColor:'#bb3c26',stack:'s'},
+      {label:'Staging',data:[0,0],backgroundColor:'#f2a516',stack:'s'}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      scales:{x:{stacked:true,grid:{display:false},ticks:{font:{family:'Archivo',weight:'700',size:12}}},
+        y:{stacked:true,ticks:{callback:function(v){return '$'+(v/1000)+'k';},font:{family:'IBM Plex Mono',size:10}}}},
+      plugins:{legend:{position:'bottom',labels:{font:{family:'IBM Plex Mono',size:11},boxWidth:12}},
+        tooltip:{callbacks:{label:function(c){return ' '+c.dataset.label+': '+money(c.parsed.y);}}}}}
+  });
+
+  function calc(){
+    var pal=+$('pal').value, store=+$('store').value, dwell=+$('dwell').value,
+        touch=+$('touch').value, stage=+$('stage').value, suit=+$('suit').value/100;
+
+    $('vPal').textContent=pal+' pallets / day';
+    $('vStore').textContent='$'+store.toFixed(2)+' / pallet / day';
+    $('vDwell').textContent=dwell+' days';
+    $('vTouch').textContent='$'+touch.toFixed(2)+' / touch';
+    $('vStage').textContent='$'+stage.toFixed(2)+' / pallet';
+    $('vSuit').textContent=Math.round(suit*100)+'%';
+
+    var perMonth=pal*DAYS;
+
+    // Scenario A: everything stored traditionally
+    var aHandling=perMonth*TR_TOUCH*touch;
+    var aStorage=perMonth*store*dwell;
+    var aTotal=aHandling+aStorage;
+
+    // Scenario B: suitable share cross-docked, rest stored
+    var xd=perMonth*suit, st=perMonth*(1-suit);
+    var bHandling=xd*XD_TOUCH*touch + st*TR_TOUCH*touch;
+    var bStorage=st*store*dwell;
+    var bStaging=xd*stage;
+    var bTotal=bHandling+bStorage+bStaging;
+
+    var save=aTotal-bTotal;
+    var savePct=aTotal>0?(save/aTotal*100):0;
+    var touchesCut=xd*(TR_TOUCH-XD_TOUCH);
+    var dwellCut=xd*dwell;
+
+    $('oTrad').textContent=money(aTotal);
+    $('oXd').textContent=money(bTotal);
+    $('oSave').innerHTML=(save<0?'−$':'$')+Math.abs(Math.round(save)).toLocaleString()+' <small>('+savePct.toFixed(1)+'%)</small>';
+    $('oTouch').textContent=Math.round(touchesCut).toLocaleString();
+    $('oDwell').textContent=Math.round(dwellCut).toLocaleString();
+
+    var v=$('oVerdict');
+    if(save>0 && savePct>=12){
+      v.className='verdict verdict--ok';
+      v.innerHTML='<b>Cross-docking wins.</b> Flowing '+Math.round(suit*100)+'% of volume straight through saves '+money(save)+' a month by removing '+Math.round(touchesCut).toLocaleString()+' touches and '+Math.round(dwellCut).toLocaleString()+' pallet-days of storage.';
+    } else if(save>0){
+      v.className='verdict verdict--info';
+      v.innerHTML='<b>Marginal gain.</b> Cross-docking saves '+money(save)+' ('+savePct.toFixed(1)+'%). Worth it only if the coordination effort is low — otherwise storage is simpler.';
+    } else {
+      v.className='verdict verdict--warn';
+      v.innerHTML='<b>Storage still wins here.</b> With this little suitable volume (or this much staging cost), cross-docking adds '+money(-save)+' a month. Keep storing until demand is more predictable.';
+    }
+
+    whChart.data.datasets[0].data=[aHandling,bHandling];
+    whChart.data.datasets[1].data=[aStorage,bStorage];
+    whChart.data.datasets[2].data=[0,bStaging];
+    whChart.update('none');
+  }
+
+  ids.forEach(function(id){$(id).addEventListener('input',calc);});
+  calc();
+})();
+</script>
+</body>
+</html>

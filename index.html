@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Introduction to Logistics — Learning Portfolio · Zokirjon</title>
+<meta name="description" content="A learning portfolio for Introduction to Logistics by Zokirjon — five interactive projects showing core logistics concepts, not assignment files.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ===================== NAV ===================== -->
+<header class="nav">
+  <div class="nav__inner">
+    <a class="brand" href="index.html">
+      <span class="brand__mark">MANIFEST&nbsp;#2317428</span>
+      <span class="brand__name">Logistics Portfolio</span>
+    </a>
+    <button class="nav__toggle" aria-expanded="false" aria-controls="navlinks">MENU</button>
+    <nav class="nav__links" id="navlinks" aria-label="Primary">
+      <a href="index.html" aria-current="page">Home</a>
+      <a href="project1.html">01 · Supply Chains</a>
+      <a href="project2.html">02 · Cost</a>
+      <a href="project3.html">03 · Modes</a>
+      <a href="project4.html">04 · Warehousing</a>
+      <a href="project5.html">05 · 3PL / 4PL</a>
+      <a href="reflection.html">Reflection</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ===================== HERO ===================== -->
+<section class="hero">
+  <div class="hero__inner">
+    <div class="hero__manifest">
+      <span>SHIPPER&nbsp;:&nbsp;<b>ZOKIRJON</b></span>
+      <span>STUDENT&nbsp;NO&nbsp;:&nbsp;<b>2317428</b></span>
+      <span>COURSE&nbsp;:&nbsp;<b>INTRODUCTION&nbsp;TO&nbsp;LOGISTICS</b></span>
+      <span>CARGO&nbsp;:&nbsp;<b>5&nbsp;CONCEPTS</b></span>
+    </div>
+    <h1>Moving &amp; Storing<br>Ideas, Not Just <span class="amber">Boxes.</span></h1>
+    <p class="hero__lead">A learning portfolio for <em>Introduction to Logistics</em>. Each stop on the route below is an interactive project built to demonstrate a core supply-chain concept — explore the tool, read the evidence, and you'll understand what I learned without ever opening my assignment files.</p>
+    <div class="hero__cta">
+      <a class="btn btn--amber" href="#manifest">View the 5 projects →</a>
+      <a class="btn btn--ghost" href="reflection.html" style="color:#fff;border-color:rgba(255,255,255,.5)">Read the reflection</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ROUTE BAND ===================== -->
+<div class="routeband" aria-hidden="true">
+  <div class="routeband__inner">
+    <div class="route">
+      <div class="route__node is-end"><span class="d"></span><small>ORIGIN</small></div>
+      <div class="route__seg"></div>
+      <div class="route__node"><span class="d"></span><small>01 · CHAINS</small></div>
+      <div class="route__seg"></div>
+      <div class="route__node"><span class="d"></span><small>02 · COST</small></div>
+      <div class="route__seg"></div>
+      <div class="route__node"><span class="d"></span><small>03 · MODES</small></div>
+      <div class="route__seg"></div>
+      <div class="route__node"><span class="d"></span><small>04 · STORAGE</small></div>
+      <div class="route__seg"></div>
+      <div class="route__node"><span class="d"></span><small>05 · 3PL/4PL</small></div>
+      <div class="route__seg"></div>
+      <div class="route__node is-end"><span class="d"></span><small>DELIVERED</small></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== INTRO ===================== -->
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <span class="n">00</span>
+      <h2>About this portfolio</h2>
+    </div>
+    <div class="introgrid">
+      <div>
+        <p class="lead-para" style="margin-bottom:22px">Logistics is the part of a supply chain that <strong>moves and stores</strong> materials — from raw resources, through factories and warehouses, to the customer, and sometimes back again. This course traced that journey end to end: how goods flow, what each move costs, which transportation mode fits which shipment, where products are stored, and who you hire to manage it all.</p>
+        <p style="color:var(--ink-soft)">Rather than collect screenshots of completed tasks, this site turns five of those concepts into things you can actually <em>use</em>. Two are reading-based explainers; three are working models I built — a freight cost calculator, a mode-selection engine, and a warehouse strategy comparator. Every project follows the same manifest: an overview of why it matters, a hands-on demonstration, evidence drawn from the coursework, and what I took away from it.</p>
+        <div class="callout" style="margin-top:24px">
+          <b>Guiding principle:</b> show the concept I learned, not simply the assignment I completed. A visitor should understand each idea within a few minutes.
+        </div>
+      </div>
+      <aside class="spec" aria-label="Portfolio specifications">
+        <div class="spec__row"><span>Course</span><span>Introduction to Logistics</span></div>
+        <div class="spec__row"><span>Student</span><span>Zokirjon</span></div>
+        <div class="spec__row"><span>Student&nbsp;No.</span><span class="mono">2317428</span></div>
+        <div class="spec__row"><span>Projects</span><span>5 concepts</span></div>
+        <div class="spec__row"><span>Reading-based</span><span>2</span></div>
+        <div class="spec__row"><span>Built models</span><span>3</span></div>
+        <div class="spec__row"><span>Hosting</span><span>GitHub Pages</span></div>
+        <div class="spec__row"><span>Stack</span><span class="mono">HTML · CSS · JS</span></div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== MANIFEST (project cards) ===================== -->
+<section class="band-alt" id="manifest">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="n">01–05</span>
+      <h2>The shipping manifest</h2>
+    </div>
+    <p class="lead-para" style="margin-bottom:34px">Five concepts, five stops. Each card opens a full project page with its own interactive demonstration.</p>
+
+    <div class="manifest">
+
+      <a class="pcard" href="project1.html">
+        <span class="pcard__demo">Interactive diagram</span>
+        <div class="pcard__top">
+          <span class="pcard__no">01</span>
+          <div class="pcard__tags">
+            <span class="tag tag--ch">Ch 1</span>
+            <span class="tag tag--reading">Reading</span>
+          </div>
+        </div>
+        <h3>The Role of Logistics in Supply Chains</h3>
+        <div class="pcard__concept">Concept · How goods, information &amp; money flow</div>
+        <p>An explorable supply-chain map. Toggle the four flows and click any tier to see where internal and external logistics actually happen — upstream, downstream, and in reverse.</p>
+        <span class="pcard__go">Open project →</span>
+      </a>
+
+      <a class="pcard" href="project2.html">
+        <span class="pcard__demo">Live calculator</span>
+        <div class="pcard__top">
+          <span class="pcard__no">02</span>
+          <div class="pcard__tags">
+            <span class="tag tag--ch">Ch 3</span>
+            <span class="tag tag--model">Built model</span>
+          </div>
+        </div>
+        <h3>The Cost of Logistics</h3>
+        <div class="pcard__concept">Concept · Fixed vs variable cost of a freight move</div>
+        <p>A working over-the-road freight cost calculator. Price a lane from miles, fuel, driver hours and deadhead, watch the fuel surcharge kick in, and see whether the move is profitable or a loss.</p>
+        <span class="pcard__go">Open project →</span>
+      </a>
+
+      <a class="pcard" href="project3.html">
+        <span class="pcard__demo">Decision engine</span>
+        <div class="pcard__top">
+          <span class="pcard__no">03</span>
+          <div class="pcard__tags">
+            <span class="tag tag--ch">Ch 4</span>
+            <span class="tag tag--model">Built model</span>
+          </div>
+        </div>
+        <h3>Modes of Transportation</h3>
+        <div class="pcard__concept">Concept · Matching the shipment to the mode</div>
+        <p>Describe a shipment — weight, distance, urgency, value, product form — and the tool scores all five modes, recommends the best fit, and plots the classic cost-versus-speed trade-off.</p>
+        <span class="pcard__go">Open project →</span>
+      </a>
+
+      <a class="pcard" href="project4.html">
+        <span class="pcard__demo">Strategy comparator</span>
+        <div class="pcard__top">
+          <span class="pcard__no">04</span>
+          <div class="pcard__tags">
+            <span class="tag tag--ch">Ch 5</span>
+            <span class="tag tag--model">Built model</span>
+          </div>
+        </div>
+        <h3>Warehousing &amp; Cross-Docking</h3>
+        <div class="pcard__concept">Concept · To store, or to flow straight through?</div>
+        <p>Compare traditional storage against cross-docking for the same goods. Adjust volume, dwell time and handling cost to find the break-even — and learn when keeping inventory still wins.</p>
+        <span class="pcard__go">Open project →</span>
+      </a>
+
+      <a class="pcard" href="project5.html" style="grid-column:1/-1">
+        <span class="pcard__demo">Provider finder</span>
+        <div class="pcard__top">
+          <span class="pcard__no">05</span>
+          <div class="pcard__tags">
+            <span class="tag tag--ch">Ch 6</span>
+            <span class="tag tag--reading">Reading</span>
+          </div>
+        </div>
+        <h3>Third &amp; Fourth Party Logistics (1PL → 4PL)</h3>
+        <div class="pcard__concept">Concept · How much of logistics should you outsource?</div>
+        <p>Answer a few questions about your operation and the finder lands you on the right provider level — from doing it all yourself (1PL) to handing your entire supply chain to a lead logistics provider (4PL) — with a side-by-side comparison of what each level actually does.</p>
+        <span class="pcard__go">Open project →</span>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===================== REFLECTION CTA ===================== -->
+<section class="band-steel">
+  <div class="wrap" style="text-align:center">
+    <span class="eyebrow" style="color:var(--amber)">Final stop</span>
+    <h2 style="font-family:var(--font-display);font-weight:900;text-transform:uppercase;font-size:clamp(1.8rem,4vw,2.8rem);margin:14px 0 16px;letter-spacing:.02em">Post-trip debrief</h2>
+    <p style="max-width:60ch;margin:0 auto 28px;color:#cdd8df;font-size:1.1rem">Which project was the most interesting, the most challenging, the most valuable — and how my understanding of logistics changed from start to finish.</p>
+    <a class="btn btn--amber" href="reflection.html">Read the final reflection →</a>
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="foot">
+  <div class="foot__inner">
+    <div class="foot__top">
+      <div>
+        <div class="foot__brand">Logistics Learning Portfolio</div>
+        <div class="mono" style="font-size:.8rem;color:#8295a2">Zokirjon · Student No. 2317428</div>
+      </div>
+      <nav class="foot__links" aria-label="Footer">
+        <a href="index.html">Home</a>
+        <a href="project1.html">Supply Chains</a>
+        <a href="project2.html">Cost</a>
+        <a href="project3.html">Modes</a>
+        <a href="project4.html">Warehousing</a>
+        <a href="project5.html">3PL / 4PL</a>
+        <a href="reflection.html">Reflection</a>
+      </nav>
+    </div>
+    <div class="foot__meta">
+      <span>Built as a static site · HTML · CSS · JavaScript · Hosted on GitHub Pages</span>
+      <span>© <span data-year>2025</span> · Concepts from <em>Introduction to Logistics</em> (Adzija, Conestoga College, CC BY-NC-SA 4.0)</span>
+    </div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

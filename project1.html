@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>01 · The Role of Logistics in Supply Chains — Portfolio</title>
+<meta name="description" content="Interactive supply chain flow explorer: how goods, information, money and returns move upstream and downstream, and where logistics happens.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  /* ---- supply-chain diagram (project 1 only) ---- */
+  .scx{border:1px solid var(--line-strong);border-radius:6px;background:var(--card);overflow:hidden}
+  .scx__legend{display:flex;flex-wrap:wrap;gap:10px;padding:16px;border-bottom:1px solid var(--line);background:#fbfaf6}
+  .flowbtn{display:inline-flex;align-items:center;gap:9px;font-family:var(--font-mono);font-size:.78rem;font-weight:500;
+    padding:9px 13px;border:1px solid var(--line-strong);background:#fff;border-radius:99px;cursor:pointer;color:var(--ink-soft);transition:all .12s}
+  .flowbtn .sw{width:22px;height:4px;border-radius:99px;display:inline-block}
+  .flowbtn[aria-pressed="false"]{opacity:.45}
+  .flowbtn[aria-pressed="true"]{border-color:var(--steel-2);color:var(--ink)}
+  .scx__stage{padding:16px 16px 8px;overflow-x:auto}
+  .scx svg{display:block;min-width:760px;width:100%;height:auto}
+  .node-box{fill:#fff;stroke:var(--steel);stroke-width:2;rx:6}
+  .node-g{cursor:pointer}
+  .node-g .node-box{transition:fill .15s,stroke .15s}
+  .node-g:hover .node-box,.node-g.active .node-box{fill:#fff8ea;stroke:var(--amber-deep)}
+  .node-g:focus{outline:none}
+  .node-g:focus-visible .node-box{stroke:var(--amber);stroke-width:3}
+  .node-tier{font-family:var(--font-mono);font-size:11px;fill:var(--amber-deep);font-weight:600;letter-spacing:.06em}
+  .node-name{font-family:'Archivo',sans-serif;font-weight:800;font-size:15px;fill:var(--ink)}
+  .lane-label{font-family:var(--font-mono);font-size:11px;letter-spacing:.08em;font-weight:600}
+  .flow line,.flow path{fill:none;stroke-width:3}
+  .flow.is-off{display:none}
+  .flow-goods path{stroke:var(--amber)}
+  .flow-info line{stroke:#2f6f8f;stroke-dasharray:7 7;animation:antsR 1.1s linear infinite}
+  .flow-money line{stroke:#1c7a52;stroke-dasharray:7 7;animation:antsL 1.1s linear infinite}
+  .flow-ret line{stroke:#bb3c26;stroke-dasharray:4 8;animation:antsL 1.3s linear infinite}
+  .flow-goods path{stroke-dasharray:7 7;animation:antsR 1s linear infinite}
+  @keyframes antsR{to{stroke-dashoffset:-28}}
+  @keyframes antsL{to{stroke-dashoffset:28}}
+  @media (prefers-reduced-motion:reduce){.flow line,.flow path{animation:none!important;stroke-dasharray:none!important}}
+  .scx__detail{padding:18px;border-top:1px solid var(--line);background:#fff;min-height:96px}
+  .scx__detail h4{margin:0 0 6px;font-family:'Archivo',sans-serif;font-weight:800;font-size:1.05rem;color:var(--steel);display:flex;align-items:center;gap:10px}
+  .scx__detail h4 .pill{font-family:var(--font-mono);font-size:.66rem;background:#1a1206;color:var(--amber);padding:3px 8px;border-radius:99px;letter-spacing:.06em}
+  .scx__detail p{margin:0;color:var(--ink-soft);font-size:.96rem}
+  .scx__detail .io{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+  .scx__detail .io span{font-family:var(--font-mono);font-size:.7rem;padding:4px 9px;border-radius:99px;border:1px solid var(--line-strong);color:var(--ink-soft)}
+  .typegrid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+  .typegrid .tc{border:1px solid var(--line-strong);border-top:3px solid var(--steel-2);border-radius:var(--r);background:var(--card);padding:16px}
+  .typegrid .tc h4{margin:0 0 8px;font-family:'Archivo',sans-serif;font-weight:800;font-size:.98rem;color:var(--steel)}
+  .typegrid .tc p{margin:0;font-size:.86rem;color:var(--ink-soft)}
+  @media (max-width:860px){.typegrid{grid-template-columns:1fr 1fr}}
+  @media (max-width:520px){.typegrid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav__inner">
+    <a class="brand" href="index.html">
+      <span class="brand__mark">MANIFEST&nbsp;#2317428</span>
+      <span class="brand__name">Logistics Portfolio</span>
+    </a>
+    <button class="nav__toggle" aria-expanded="false" aria-controls="navlinks">MENU</button>
+    <nav class="nav__links" id="navlinks" aria-label="Primary">
+      <a href="index.html">Home</a>
+      <a href="project1.html" aria-current="page">01 · Supply Chains</a>
+      <a href="project2.html">02 · Cost</a>
+      <a href="project3.html">03 · Modes</a>
+      <a href="project4.html">04 · Warehousing</a>
+      <a href="project5.html">05 · 3PL / 4PL</a>
+      <a href="reflection.html">Reflection</a>
+    </nav>
+  </div>
+</header>
+
+<!-- PROJECT HEADER -->
+<div class="phead">
+  <div class="phead__inner">
+    <div class="phead__crumb">
+      <a href="index.html">Manifest</a> <span>/</span> <span>Project 01</span> <span>/</span> <span>Chapter 1</span>
+    </div>
+    <div class="phead__tags">
+      <span class="tag tag--ch">Chapter 1</span>
+      <span class="tag tag--reading">Reading-based</span>
+      <span class="tag" style="border-color:rgba(255,255,255,.4);color:#fff">Interactive diagram</span>
+    </div>
+    <h1>The Role of Logistics<br>in Supply Chains</h1>
+    <p class="phead__sub">Logistics is the slice of a supply chain that moves and stores materials. Before anything else, you have to see the whole network — and the four things flowing through it.</p>
+    <div class="pprogress" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i><i></i></div>
+  </div>
+</div>
+
+<main class="wrap">
+
+  <!-- 1 · OVERVIEW -->
+  <section class="psec">
+    <div class="psec__head"><span class="psec__num">1</span><h2>Project overview</h2></div>
+    <p class="psec__intro">A supply chain is the whole network that creates a product and delivers it to a customer — sourcing, manufacturing, sales, finance and more. <strong>Logistics is the subset that physically moves and stores things</strong> along that network. This first project sets the foundation for every project that follows: you can't price a freight move, choose a mode, or design a warehouse until you can picture where it sits in the chain.</p>
+    <ul class="bullets">
+      <li><b>What inspired it:</b> Chapter 1's diagrams of upstream/downstream flow and the opening idea that the coffee on your desk arrived through a product supply chain.</li>
+      <li><b>The concept:</b> goods, information, money and returns move through tiered supply chains — and logistics, split into <em>internal</em> (inside one site) and <em>external</em> (between sites), connects every step.</li>
+      <li><b>Why it matters:</b> the goal of logistics is delivery to the <em>right place, at the right time, at the right price</em>. You can only hit that target if you understand the network it travels through.</li>
+    </ul>
+  </section>
+
+  <!-- 2 · DEMONSTRATION -->
+  <section class="psec">
+    <div class="psec__head"><span class="psec__num">2</span><h2>Demonstration · Supply chain flow explorer</h2></div>
+    <p class="psec__intro">Toggle the four flows on and off, then click any tier to see what logistics happens there. Goods move <em>downstream</em>; cash and returns move <em>upstream</em>; information runs <em>both ways</em>.</p>
+
+    <div class="scx">
+      <div class="scx__legend" role="group" aria-label="Toggle supply chain flows">
+        <button class="flowbtn" data-flow="goods" aria-pressed="true"><span class="sw" style="background:var(--amber)"></span> Goods &nbsp;→ downstream</button>
+        <button class="flowbtn" data-flow="info" aria-pressed="true"><span class="sw" style="background:#2f6f8f"></span> Information &nbsp;↔ both ways</button>
+        <button class="flowbtn" data-flow="money" aria-pressed="true"><span class="sw" style="background:#1c7a52"></span> Cash &nbsp;← upstream</button>
+        <button class="flowbtn" data-flow="ret" aria-pressed="true"><span class="sw" style="background:#bb3c26"></span> Returns &nbsp;← reverse</button>
+      </div>
+
+      <div class="scx__stage">
+        <svg viewBox="0 0 1140 410" role="img" aria-label="Supply chain from raw materials to customer with four flows">
+          <defs>
+            <marker id="arrA" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="var(--amber)"/></marker>
+            <marker id="arrB" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="#2f6f8f"/></marker>
+            <marker id="arrBl" markerWidth="9" markerHeight="9" refX="2" refY="4.5" orient="auto"><path d="M9,0 L0,4.5 L9,9 Z" fill="#2f6f8f"/></marker>
+            <marker id="arrG" markerWidth="9" markerHeight="9" refX="2" refY="4.5" orient="auto"><path d="M9,0 L0,4.5 L9,9 Z" fill="#1c7a52"/></marker>
+            <marker id="arrR" markerWidth="9" markerHeight="9" refX="2" refY="4.5" orient="auto"><path d="M9,0 L0,4.5 L9,9 Z" fill="#bb3c26"/></marker>
+          </defs>
+
+          <!-- INFORMATION lane (top, both ways) -->
+          <g class="flow flow-info" data-flow="info">
+            <text class="lane-label" x="18" y="40" fill="#2f6f8f">INFORMATION ↔</text>
+            <line x1="120" y1="58" x2="1020" y2="58" marker-end="url(#arrB)" marker-start="url(#arrBl)"/>
+          </g>
+
+          <!-- GOODS (forward, stepwise in gaps) -->
+          <g class="flow flow-goods" data-flow="goods">
+            <text class="lane-label" x="18" y="205" fill="var(--amber-deep)">GOODS →</text>
+            <path d="M167,205 L205,205" marker-end="url(#arrA)"/>
+            <path d="M359,205 L397,205" marker-end="url(#arrA)"/>
+            <path d="M551,205 L589,205" marker-end="url(#arrA)"/>
+            <path d="M743,205 L781,205" marker-end="url(#arrA)"/>
+            <path d="M935,205 L973,205" marker-end="url(#arrA)"/>
+          </g>
+
+          <!-- CASH lane (bottom, upstream) -->
+          <g class="flow flow-money" data-flow="money">
+            <text class="lane-label" x="18" y="332" fill="#1c7a52">CASH ←</text>
+            <line x1="1020" y1="320" x2="120" y2="320" marker-end="url(#arrG)"/>
+          </g>
+
+          <!-- RETURNS lane (bottom, reverse, partial) -->
+          <g class="flow flow-ret" data-flow="ret">
+            <text class="lane-label" x="18" y="372" fill="#bb3c26">RETURNS ←</text>
+            <line x1="1020" y1="360" x2="475" y2="360" marker-end="url(#arrR)"/>
+          </g>
+
+          <!-- NODES -->
+          <g class="node-g" tabindex="0" role="button" data-id="t2" aria-label="Tier 2, Raw materials supplier">
+            <rect class="node-box" x="15" y="150" width="150" height="100" rx="6"/>
+            <text class="node-tier" x="30" y="178">TIER 2</text>
+            <text class="node-name" x="30" y="200">Raw</text>
+            <text class="node-name" x="30" y="220">Materials</text>
+          </g>
+          <g class="node-g" tabindex="0" role="button" data-id="t1" aria-label="Tier 1, Sub-assembly and parts">
+            <rect class="node-box" x="207" y="150" width="150" height="100" rx="6"/>
+            <text class="node-tier" x="222" y="178">TIER 1</text>
+            <text class="node-name" x="222" y="200">Sub-</text>
+            <text class="node-name" x="222" y="220">assembly</text>
+          </g>
+          <g class="node-g" tabindex="0" role="button" data-id="mfg" aria-label="Manufacturer, assembly plant">
+            <rect class="node-box" x="399" y="150" width="150" height="100" rx="6"/>
+            <text class="node-tier" x="414" y="178">PLANT</text>
+            <text class="node-name" x="414" y="200">Manu-</text>
+            <text class="node-name" x="414" y="220">facturer</text>
+          </g>
+          <g class="node-g" tabindex="0" role="button" data-id="dc" aria-label="Distribution centre and warehouse">
+            <rect class="node-box" x="591" y="150" width="150" height="100" rx="6"/>
+            <text class="node-tier" x="606" y="178">STORAGE</text>
+            <text class="node-name" x="606" y="200">Distribution</text>
+            <text class="node-name" x="606" y="220">Centre</text>
+          </g>
+          <g class="node-g" tabindex="0" role="button" data-id="ret" aria-label="Retailer, store">
+            <rect class="node-box" x="783" y="150" width="150" height="100" rx="6"/>
+            <text class="node-tier" x="798" y="178">RETAIL</text>
+            <text class="node-name" x="798" y="200">Retailer</text>
+            <text class="node-name" x="798" y="220">/ Store</text>
+          </g>
+          <g class="node-g" tabindex="0" role="button" data-id="cust" aria-label="Customer, end user">
+            <rect class="node-box" x="975" y="150" width="150" height="100" rx="6"/>
+            <text class="node-tier" x="990" y="178">DEMAND</text>
+            <text class="node-name" x="990" y="200">Customer</text>
+            <text class="node-name" x="990" y="220">/ End user</text>
+          </g>
+        </svg>
+      </div>
+
+      <div class="scx__detail" id="scxDetail" aria-live="polite">
+        <h4>Click a tier to inspect it <span class="pill">TAP ANY BOX</span></h4>
+        <p>Each stage in the chain has its own logistics job — receiving, internal movement, storage and shipping. Upstream tiers (left) feed downstream tiers (right); the end customer is where demand starts and where reverse flows begin.</p>
+      </div>
+    </div>
+
+    <div class="callout" style="margin-top:22px">
+      <b>Internal vs external logistics:</b> internal logistics moves parts and products <em>within a single facility</em> (forklifts on the plant floor); external logistics moves them <em>between locations</em> — suppliers, factories, distribution centres and customers. Almost every box above involves both.
+    </div>
+  </section>
+
+  <!-- 3 · EVIDENCE -->
+  <section class="psec">
+    <div class="psec__head"><span class="psec__num">3</span><h2>Evidence</h2></div>
+    <p class="psec__intro">Chapter 1 distinguishes several kinds of supply chain. Each carries different "cargo," but all of them depend on logistics to move and store it. Below is my recreated summary, plus the chapter's bottled-water cost prompt that made the role of logistics concrete.</p>
+
+    <div class="typegrid">
+      <div class="tc"><h4>Product</h4><p>Physical goods flow from raw materials through manufacturing to the end user. The classic forward chain.</p></div>
+      <div class="tc"><h4>Information</h4><p>Data and documents (orders, bills of lading, status) move through systems and EDI, then get stored in databases.</p></div>
+      <div class="tc"><h4>Service</h4><p>Intangible outputs (a haircut, legal advice) still need products, knowledge and talent supplied behind them.</p></div>
+      <div class="tc"><h4>Reverse</h4><p>Returned, damaged or end-of-life products flow backward — downstream to upstream — for refund, repair or scrap.</p></div>
+      <div class="tc"><h4>Circular</h4><p>Old products and waste are fed back as raw materials for a new cycle. Sustainability is built in.</p></div>
+    </div>
+
+    <div class="two-col" style="margin-top:30px">
+      <table class="manifest-table">
+        <caption>Recreated · The four flows in a supply chain</caption>
+        <thead><tr><th>Flow</th><th>Direction</th><th>Example cargo</th></tr></thead>
+        <tbody>
+          <tr><td>Goods / materials</td><td class="mono">Downstream →</td><td>Parts, finished products</td></tr>
+          <tr><td>Information</td><td class="mono">↔ Both ways</td><td>Forecasts, orders, tracking</td></tr>
+          <tr><td>Money / cash</td><td class="mono">← Upstream</td><td>Payments up each tier</td></tr>
+          <tr><td>Returns</td><td class="mono">← Reverse</td><td>Damaged / returned goods</td></tr>
+        </tbody>
+      </table>
+
+      <figure class="figure-card" style="margin-top:0">
+        <div class="callout" style="margin:0;border-left-color:var(--steel-2)">
+          <b>Coursework prompt — "the $2 bottle of water."</b> Chapter 1 asks: of the $1.50–$2.00 you pay for bottled water, how much is the water itself versus the logistics of moving and storing it? Trucks haul it, forklifts load it, warehouses hold it. The exercise reframes logistics as a real, costed share of everyday prices — which is exactly what Project 02 then measures.
+        </div>
+        <figcaption>Artifact · Chapter 1 reflection exercise</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- 4 · LEARN -->
+  <section class="psec">
+    <div class="psec__head"><span class="psec__num">4</span><h2>What did I learn?</h2></div>
+    <div class="learn">
+      <div class="learn__col">
+        <h3>Knowledge <span>// concepts</span></h3>
+        <ul>
+          <li>Logistics is a <b>subset</b> of supply chain management — specifically the moving and storing.</li>
+          <li>Supply chains carry <b>four flows</b>: goods downstream, cash and returns upstream, information both ways.</li>
+          <li><b>Internal vs external</b> logistics, and chain types: product, information, service, reverse, circular.</li>
+        </ul>
+      </div>
+      <div class="learn__col">
+        <h3>Skills <span>// abilities</span></h3>
+        <ul>
+          <li><b>Systems thinking</b> — mapping a whole network instead of one isolated shipment.</li>
+          <li>Translating a static textbook diagram into an <b>interactive model</b> with SVG and JavaScript.</li>
+          <li>Spotting where each later concept (cost, mode, warehouse) <b>plugs into</b> the chain.</li>
+        </ul>
+      </div>
+      <div class="learn__col">
+        <h3>Reflection <span>// real world</span></h3>
+        <ul>
+          <li><b>Surprising:</b> money and returns flow <em>backwards</em> — the chain isn't a one-way street.</li>
+          <li><b>Difficult:</b> deciding which flows to show without the diagram becoming noise.</li>
+          <li><b>Applied:</b> the same map explains an online order, a car factory, or a circular recycling loop.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- PREV/NEXT -->
+  <nav class="pnav" aria-label="Project navigation">
+    <a class="next disabled" aria-disabled="true"><small>← Previous</small><b>Start of route</b></a>
+    <a class="next" href="project2.html"><small>Next project →</small><b>02 · The Cost of Logistics</b></a>
+  </nav>
+
+</main>
+
+<footer class="foot">
+  <div class="foot__inner">
+    <div class="foot__top">
+      <div>
+        <div class="foot__brand">Logistics Learning Portfolio</div>
+        <div class="mono" style="font-size:.8rem;color:#8295a2">Zokirjon · Student No. 2317428</div>
+      </div>
+      <nav class="foot__links" aria-label="Footer">
+        <a href="index.html">Home</a><a href="project1.html">Supply Chains</a><a href="project2.html">Cost</a>
+        <a href="project3.html">Modes</a><a href="project4.html">Warehousing</a><a href="project5.html">3PL / 4PL</a><a href="reflection.html">Reflection</a>
+      </nav>
+    </div>
+    <div class="foot__meta">
+      <span>Built as a static site · HTML · CSS · JavaScript · Hosted on GitHub Pages</span>
+      <span>© <span data-year>2025</span> · Concepts from <em>Introduction to Logistics</em> (Adzija, CC BY-NC-SA 4.0)</span>
+    </div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+<script>
+(function(){
+  // flow toggles
+  document.querySelectorAll('.flowbtn').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var f=btn.dataset.flow;
+      var on=btn.getAttribute('aria-pressed')==='true';
+      btn.setAttribute('aria-pressed', on?'false':'true');
+      var g=document.querySelector('.flow[data-flow="'+f+'"]');
+      if(g) g.classList.toggle('is-off', on);
+    });
+  });
+
+  // node detail data
+  var data={
+    t2:{tier:'TIER 2',name:'Raw Materials Supplier',body:'The start of the chain. Raw materials — ore, oil, timber, crops — are extracted or grown, then shipped onward. Storage here means bulk yards and raw-material warehouses.',io:['External: outbound to Tier 1','Storage: bulk / raw']},
+    t1:{tier:'TIER 1',name:'Sub-assembly / Parts Maker',body:'Raw materials are converted into components. Inbound logistics receives the materials, internal logistics moves parts along the line, and outbound logistics ships sub-assemblies to the manufacturer.',io:['Inbound + internal + outbound','Make-to-order parts']},
+    mfg:{tier:'PLANT',name:'Manufacturer',body:'Components are assembled into finished products. Automotive plants, for example, pull in full truckloads of parts. Internal logistics feeds the line; finished goods are stored before shipping out.',io:['Inbound: FTL parts','Storage: finished goods']},
+    dc:{tier:'STORAGE',name:'Distribution Centre',body:'The storage half of logistics. Finished goods are received, consolidated, and allocated to retailers — sometimes cross-docked straight through with no real storage at all (see Project 04).',io:['Consolidation / cross-dock','Break-bulk to retail']},
+    ret:{tier:'RETAIL',name:'Retailer / Store',body:'Goods arrive from the DC and are held as shelf and backroom inventory until a customer buys them. This is the last storage point before the product reaches its user.',io:['Inbound from DC','Storage: shelf / backroom']},
+    cust:{tier:'DEMAND',name:'Customer / End User',body:'Demand starts here — the customer order is what pulls everything upstream into motion. It is also the origin of the reverse chain: returns, repairs and recycling flow back from this point.',io:['Origin of demand','Start of reverse flow']}
+  };
+  var detail=document.getElementById('scxDetail');
+  function show(id){
+    var d=data[id]; if(!d) return;
+    document.querySelectorAll('.node-g').forEach(function(n){n.classList.toggle('active',n.dataset.id===id);});
+    detail.innerHTML='<h4>'+d.name+' <span class="pill">'+d.tier+'</span></h4><p>'+d.body+'</p><div class="io">'+d.io.map(function(x){return '<span>'+x+'</span>';}).join('')+'</div>';
+  }
+  document.querySelectorAll('.node-g').forEach(function(n){
+    n.addEventListener('click',function(){show(n.dataset.id);});
+    n.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();show(n.dataset.id);}});
+  });
+})();
+</script>
+</body>
+</html>
